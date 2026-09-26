@@ -1,0 +1,13 @@
+{
+  "0": "dependencies",
+  "1": "devDependencies",
+  "2": "Topography.jsx",
+  "3": "components.json",
+  "4": "package.json",
+  "5": ".oxlintrc.json",
+  "6": "aliases",
+  "7": "tailwind",
+  "8": "compilerOptions",
+  "9": "React + Vite",
+  "10": "vite.config.js"
+}
