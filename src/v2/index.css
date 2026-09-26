@@ -1,0 +1,814 @@
+@import "@fontsource-variable/geist";
+@import "tailwindcss";
+:root {
+  /* near-black with a faint navy cast: white does the hierarchy (lit, muted, dim), one steel-blue accent for focus */
+  --background: #080b12;
+  --text: rgba(244, 247, 252, 0.72);
+  --text-h: #f4f7fc;
+  --text-muted: rgba(244, 247, 252, 0.55);
+  --text-dim: rgba(244, 247, 252, 0.4); /* the quieter half of a two-tone headline: large type only */
+  --border: rgba(244, 247, 252, 0.08);
+  --accent: #94b4e6;
+  --glow-violet: #7c3aed; /* the topography's line colours: the aurora carries them down the page, change them together */
+  --glow-cyan: #22d3ee;
+  --todo: #facc15; /* placeholders only the studio can fill in (the client quote): never ships */
+
+  /* radii: 8 = buttons, 10 = screenshots, 12 = the email block, round = links */
+  --radius-media: 10px;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --sans: 'Geist Variable', system-ui, 'Segoe UI', Roboto, sans-serif;
+
+  font: 18px/145% var(--sans);
+  letter-spacing: 0.18px;
+  color-scheme: dark;
+  color: var(--text);
+  background: var(--background);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  @media (max-width: 1024px) {
+    font-size: 16px;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent) 38%, transparent);
+  color: var(--text-h);
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: var(--background);
+  color: var(--text);
+}
+
+#root {
+  width: 100%;
+  min-height: 100svh;
+  text-align: center;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 500;
+  color: var(--text-h);
+  text-wrap: balance;
+}
+
+p {
+  margin: 0;
+}
+
+/* placeholders only the studio can fill in: loud on purpose so none ships */
+mark {
+  padding: 0.3em 0.4em;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--todo) 22%, transparent);
+  color: var(--text-h);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+.app-shell {
+  position: relative;
+  min-height: 100svh;
+  overflow: hidden;
+  background: var(--background);
+}
+
+/* ---------- shared bits ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  background: var(--text-h);
+  color: var(--background);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color 180ms ease, transform 180ms ease;
+
+  &:hover,
+  &:focus-visible {
+    background: #d9e2f0; /* a step toward the accent: visible on white, unlike an opacity change */
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+  font-size: 14px;
+  text-decoration: none;
+  transition: color 180ms ease;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--text-h);
+  }
+
+  svg {
+    transition: translate 350ms var(--ease-out);
+  }
+}
+
+/* the glass frame for screenshots: a soft ring with a hairline outside it, then a deep shadow to lift it off the page */
+.shot {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-media);
+  object-fit: cover;
+  object-position: top;
+  box-shadow:
+    0 0 0 8px rgba(244, 247, 252, 0.035),
+    0 0 0 9px rgba(244, 247, 252, 0.09),
+    0 40px 80px -32px rgba(0, 0, 0, 0.8);
+}
+
+/* ---------- hero: the headline on the left, the client's site on the right ---------- */
+
+.topography-hero {
+  position: relative;
+  min-height: 100svh;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--background);
+}
+
+.topography-hero__background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+
+  /* the WebGL canvas fades up instead of popping in when it starts */
+  .topography-container {
+    animation: fade-in 1200ms ease-out both;
+  }
+}
+
+/* scrim: darkest where the copy sits, clear around the screenshot, so the lines never run through the headline */
+.topography-hero__background::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--background) 92%, transparent) 25%, transparent 70%);
+
+  @media (max-width: 900px) {
+    background: color-mix(in srgb, var(--background) 84%, transparent); /* copy spans the full width here */
+  }
+}
+
+.topography-hero__content {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); /* the copy column is just wide enough for "grow your business" on one line */
+  align-items: center;
+  gap: clamp(40px, 6vw, 88px);
+  width: min(1120px, 100%);
+  min-height: 100svh;
+  margin-inline: auto;
+  padding: 112px clamp(24px, 4vw, 40px) 80px;
+  color: var(--text-h);
+  text-align: left;
+
+  @media (max-width: 900px) {
+    grid-template-columns: minmax(0, 1fr);
+    align-content: center;
+    gap: 56px;
+    padding-bottom: 64px;
+  }
+}
+
+/* type scale: 58 display / 48 section / 36 project / 16 body on desktop; 36 / 30 / 24 / 16 on phones */
+.topography-hero h1 {
+  margin: 0;
+  font-size: clamp(36px, 5.2vw, 58px);
+  letter-spacing: -0.035em;
+  line-height: 1.04;
+
+  span {
+    display: block;
+    color: var(--text-dim); /* the set-up is quiet; the promise, "grow your business", is the brightest line on the page */
+  }
+}
+
+.topography-hero__description {
+  max-width: 44ch;
+  margin-top: 24px;
+  color: var(--text-muted);
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.topography-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px 24px;
+  margin-top: 32px;
+}
+
+.hero-work {
+  margin: 0;
+
+  figcaption {
+    margin-top: 22px;
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+}
+
+/* the one authored moment: on arrival the headline and the client's site come in as one short stagger */
+.rise {
+  animation: rise 700ms var(--ease-out) calc(80ms + var(--i) * 90ms) both;
+}
+
+/* aurora: once the topography fades, the same violet and cyan stay on as faint light behind the page.
+   The element itself carries a film grain (it also stops the gradients banding); the two pseudo-elements are the light,
+   moved with transform only so the drift stays on the compositor */
+.aurora {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0; /* only revealed by the scroll animation below */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 .09 0 0 0 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -25%;
+  }
+
+  &::before {
+    background:
+      radial-gradient(38% 34% at 22% 68%, color-mix(in srgb, var(--glow-violet) 16%, transparent), transparent),
+      radial-gradient(26% 24% at 78% 18%, color-mix(in srgb, var(--glow-violet) 9%, transparent), transparent);
+  }
+
+  &::after {
+    background:
+      radial-gradient(34% 30% at 80% 62%, color-mix(in srgb, var(--glow-cyan) 10%, transparent), transparent),
+      radial-gradient(24% 22% at 36% 26%, color-mix(in srgb, var(--glow-cyan) 6%, transparent), transparent);
+  }
+}
+
+/* ---------- nav: full-width bar; Contact is outlined so each view keeps one white button ---------- */
+
+.site-nav {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  height: 64px;
+  padding-inline: max(24px, calc(50% - 520px)); /* lines up with the 1120px shell without a wrapper div */
+  border-bottom: 1px solid var(--border);
+  background: rgba(8, 11, 18, 0.8);
+  backdrop-filter: blur(24px);
+
+  @media (max-width: 480px) {
+    gap: 20px;
+  }
+
+  a:not(.btn) {
+    padding-block: 8px; /* 24px+ hit area without relying on the spacing exception (WCAG 2.5.8) */
+    color: var(--text-muted);
+    font-size: 14px;
+    text-decoration: none;
+    transition: color 180ms ease;
+
+    &:hover,
+    &:focus-visible {
+      color: var(--text-h);
+    }
+  }
+
+  a.site-nav__brand {
+    margin-right: auto;
+    color: var(--text-h);
+    font-size: 16px; /* the lowercase name reads smaller than capitals at the same size */
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+  }
+
+  /* on the smallest phones the hero's "See our work" covers it */
+  a.site-nav__projects {
+    @media (max-width: 420px) {
+      display: none;
+    }
+  }
+
+  .btn {
+    gap: 6px;
+    padding: 8px 14px;
+    background: transparent;
+    box-shadow: inset 0 0 0 1px rgba(244, 247, 252, 0.28);
+    color: var(--text-h);
+    font-size: 14px;
+    white-space: nowrap;
+
+    &:hover,
+    &:focus-visible {
+      background: rgba(244, 247, 252, 0.08);
+    }
+  }
+}
+
+/* ---------- sections ---------- */
+
+.projects,
+.close {
+  position: relative;
+  z-index: 1; /* above the hero's stacking context, which holds the fixed aurora */
+  padding: clamp(112px, 15vw, 176px) 0;
+  color: var(--text);
+}
+
+/* two-tone section titles: the point is bright, the rest is quiet and starts its own line */
+.projects__intro h2,
+.close h2 {
+  margin: 0;
+  font-size: clamp(30px, 4vw, 48px);
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+
+  span {
+    display: block;
+    color: var(--text-dim);
+  }
+}
+
+/* Projects has no box: it sits on the page the way the hero does, on the same 1120px shell and left edge as the hero copy */
+.projects {
+  padding-bottom: clamp(48px, 8vw, 96px);
+}
+
+.projects__intro,
+.project-card {
+  width: min(1120px, 100%);
+  margin-inline: auto;
+  padding-inline: clamp(24px, 4vw, 40px);
+  text-align: left;
+}
+
+.projects__intro {
+  margin-bottom: clamp(56px, 8vw, 88px);
+
+  p {
+    max-width: 46ch;
+    margin-top: 24px;
+    color: var(--text-muted);
+    font-size: 16px;
+    line-height: 1.65;
+  }
+}
+
+.close {
+  padding-inline: clamp(24px, 4vw, 40px);
+  text-align: center;
+
+  h2 {
+    max-width: 18ch;
+    margin-inline: auto;
+  }
+}
+
+.close__lead {
+  max-width: 42ch;
+  margin: 24px auto 0;
+  color: var(--text-muted);
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.close__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 16px 20px;
+  margin-top: 44px;
+}
+
+/* the address itself, visible and copyable, so the mailto button is never the only way in */
+.email-copy {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  max-width: 100%;
+  padding: 4px 4px 4px 16px;
+  border-radius: 12px;
+  box-shadow: inset 0 0 0 1px rgba(244, 247, 252, 0.14);
+
+  a {
+    min-width: 0;
+    color: var(--text-h);
+    font-size: 14px;
+    text-decoration: none;
+    text-underline-offset: 3px;
+    overflow-wrap: anywhere;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    color: var(--text-muted);
+    font-size: 13px;
+    cursor: pointer;
+    transition: color 180ms ease, background-color 180ms ease;
+
+    &:hover,
+    &:focus-visible,
+    &[data-state='copied'] {
+      background: rgba(244, 247, 252, 0.07);
+      color: var(--text-h);
+    }
+  }
+}
+
+/* phone and WhatsApp under the email, each 44px tall so it's easy to tap */
+.close__channels {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  column-gap: 28px;
+  margin-top: 16px;
+
+  a {
+    min-height: 44px;
+  }
+}
+
+.site-footer {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 16px;
+  width: min(1120px, 100%);
+  margin-inline: auto;
+  padding: 24px clamp(24px, 4vw, 40px);
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 12.5px;
+
+  a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 180ms ease;
+
+    &:hover,
+    &:focus-visible,
+    &[aria-current] {
+      color: var(--text-h);
+    }
+  }
+}
+
+.site-footer__legal {
+  display: flex;
+  gap: 20px;
+}
+
+/* ---------- legal pages (v2-privacy.html, v2-cookies.html): plain HTML on the same shell and tokens, no JS ---------- */
+
+.aurora--static {
+  opacity: 1; /* no hero to fade out of: the light is simply on */
+}
+
+.legal {
+  position: relative;
+  z-index: 1; /* above the fixed aurora */
+  width: min(600px, 100%); /* about 72 characters a line at 16px */
+  margin-inline: auto;
+  padding: 144px clamp(24px, 4vw, 40px) 96px;
+  font-size: 16px;
+  line-height: 1.7;
+
+  h1 {
+    margin: 0;
+    font-size: clamp(36px, 5.2vw, 58px); /* the same display role as the home page H1 */
+    letter-spacing: -0.035em;
+    line-height: 1.04;
+  }
+
+  h2 {
+    margin: 56px 0 0;
+    font-size: 22px;
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+  }
+
+  p,
+  ul {
+    margin: 16px 0 0;
+  }
+
+  ul {
+    padding-left: 1.25em;
+    list-style: disc;
+  }
+
+  li + li {
+    margin-top: 6px;
+  }
+
+  a {
+    color: var(--text-h);
+    text-decoration: underline; /* preflight strips it; in running text colour alone isn't enough (WCAG 1.4.1) */
+    text-underline-offset: 3px;
+  }
+
+  strong {
+    color: var(--text-h);
+    font-weight: 500;
+  }
+}
+
+.legal .legal__lead {
+  margin-top: 24px;
+  color: var(--text-muted);
+  font-size: 18px;
+}
+
+.legal .legal__updated {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+/* ---------- the project: no box, only the screenshots get the glass frame ---------- */
+
+/* the next project gets the same breathing room as a new section */
+.project-card + .project-card {
+  margin-top: clamp(112px, 15vw, 176px);
+}
+
+.project-card h3 {
+  margin: 0;
+  font-size: clamp(24px, 3vw, 36px);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.project-card__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px 24px;
+}
+
+.project-card__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px 6px 14px;
+  border: 1px solid rgba(244, 247, 252, 0.12);
+  border-radius: 999px;
+  color: var(--text);
+  font-size: 14px;
+  text-decoration: none;
+  transition: border-color 180ms ease, color 180ms ease;
+
+  &:hover,
+  &:focus-visible {
+    border-color: rgba(244, 247, 252, 0.28);
+    color: var(--text-h);
+  }
+
+  svg {
+    color: var(--text-muted);
+  }
+}
+
+.project-card__summary {
+  max-width: 60ch;
+  margin-top: 24px;
+  color: var(--text-muted);
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.project-quote {
+  max-width: 40rem;
+  margin: 48px 0 0;
+  padding-left: 24px;
+  border-left: 1px solid rgba(244, 247, 252, 0.18);
+
+  blockquote {
+    margin: 0;
+    color: var(--text-h);
+    font-size: clamp(18px, 1.9vw, 21px);
+    line-height: 1.55;
+    letter-spacing: -0.01em;
+  }
+
+  figcaption {
+    margin-top: 14px;
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+}
+
+/* two text features side by side, the team page wide (it's all faces), then two screenshots */
+.project-card__features {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 56px 40px;
+  margin: 72px 0 0;
+  padding: 0;
+  list-style: none;
+
+  @media (max-width: 700px) {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 48px;
+  }
+
+  & > li {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    &.feature--wide {
+      grid-column: 1 / -1;
+
+      .shot {
+        aspect-ratio: 2 / 1;
+      }
+    }
+
+    .shot {
+      margin-bottom: 18px;
+      transition: translate 250ms var(--ease-out);
+    }
+
+    h4 {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0;
+      color: var(--text-h);
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    h4 svg {
+      flex: none;
+      box-sizing: content-box;
+      padding: 7px; /* icon in its own hairline square */
+      border: 1px solid rgba(244, 247, 252, 0.09);
+      border-radius: 8px;
+      color: var(--text);
+    }
+
+    p {
+      max-width: 52ch;
+      color: var(--text-muted);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+  }
+}
+
+/* the seven languages as plain text: they aren't buttons, so they shouldn't look like them */
+.project-card__languages {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 4px;
+  margin: 2px 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--text);
+  font-size: 15px;
+
+  li + li::before {
+    content: '·';
+    content: '·' / '';
+    margin-inline: 10px;
+    color: var(--text-dim);
+  }
+}
+
+/* ---------- scroll-driven bits ---------- */
+
+/* ponytail: CSS-only; browsers without animation-timeline keep the static layout (topography scrolls away, no aurora) */
+@supports (animation-timeline: scroll()) {
+  /* the contour lines hand over to the aurora as the hero leaves; Topography.jsx stops drawing once they're gone (keep in sync) */
+  .topography-hero__background {
+    position: fixed; /* canvas stays viewport-sized while the hero scrolls */
+    animation: fade-out linear both;
+    animation-timeline: scroll(root);
+    animation-range: 30svh 90svh;
+  }
+
+  .aurora {
+    animation: aurora-in linear both;
+    animation-timeline: scroll(root);
+    animation-range: 30svh 90svh;
+  }
+}
+
+/* fades run for everyone (Windows "animation effects" off = reduce); moves only when motion is allowed */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes aurora-in {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+  }
+
+  @keyframes drift-a {
+    50% {
+      transform: translate(8%, -6%) rotate(8deg) scale(1.1);
+    }
+  }
+
+  @keyframes drift-b {
+    50% {
+      transform: translate(-10%, 5%) rotate(-6deg) scale(1.05);
+    }
+  }
+
+  .aurora::before {
+    animation: drift-a 60s ease-in-out infinite;
+  }
+
+  .aurora::after {
+    animation: drift-b 76s ease-in-out infinite;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  .project-card__features > li:hover .shot {
+    translate: 0 -3px;
+  }
+
+  .text-link:hover svg,
+  .text-link:focus-visible svg {
+    translate: 2px 0;
+  }
+}

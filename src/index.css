@@ -1,0 +1,104 @@
+@import "@fontsource-variable/geist";
+@import "tailwindcss";
+:root {
+  /* calm dark blue: one palette, one accent (steel blue) */
+  --background: #0b1424;
+  --bg: var(--background);
+  --surface: #111c31;
+  --surface-2: #17243d;
+  --text: #dbe4f3;
+  --text-h: #f0f4fb;
+  --text-muted: rgba(219, 228, 243, 0.68);
+  --border: rgba(219, 228, 243, 0.12);
+  --accent: #94b4e6;
+  --accent-bg: rgba(148, 180, 230, 0.14);
+  --accent-border: rgba(148, 180, 230, 0.4);
+  --code-bg: var(--surface);
+  --social-bg: rgba(219, 228, 243, 0.08);
+  --shadow: 0 24px 48px -24px rgba(3, 7, 16, 0.8);
+
+  /* radii: pill = interactive (nav, buttons, chips), then card > tile > media */
+  --radius-card: 24px;
+  --radius-tile: 16px;
+  --radius-media: 10px;
+
+  --sans: 'Geist Variable', system-ui, 'Segoe UI', Roboto, sans-serif;
+  --heading: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+  --mono: ui-monospace, Consolas, monospace;
+
+  font: 18px/145% var(--sans);
+  letter-spacing: 0.18px;
+  color-scheme: dark;
+  color: var(--text);
+  background: var(--background);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  @media (max-width: 1024px) {
+    font-size: 16px;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: var(--background);
+  color: var(--text);
+}
+
+#root {
+  width: 100%;
+  min-height: 100svh;
+  text-align: center;
+}
+
+h1,
+h2 {
+  font-family: var(--heading);
+  font-weight: 500;
+  color: var(--text-h);
+}
+
+h1 {
+  font-size: 56px;
+  letter-spacing: -1.68px;
+  margin: 32px 0;
+  @media (max-width: 1024px) {
+    font-size: 36px;
+    margin: 20px 0;
+  }
+}
+h2 {
+  font-size: 24px;
+  line-height: 118%;
+  letter-spacing: -0.24px;
+  margin: 0 0 8px;
+  @media (max-width: 1024px) {
+    font-size: 20px;
+  }
+}
+p {
+  margin: 0;
+}
+
+code,
+.counter {
+  font-family: var(--mono);
+  display: inline-flex;
+  border-radius: 4px;
+  color: var(--text-h);
+}
+
+code {
+  font-size: 15px;
+  line-height: 135%;
+  padding: 4px 8px;
+  background: var(--code-bg);
+}

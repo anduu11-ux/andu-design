@@ -1,0 +1,322 @@
+{
+  ".claude/launch.json": {
+    "mtime": 1790422479.0916104,
+    "ast_hash": "13d552e9d6e18a8c558c5ad407e91708",
+    "semantic_hash": ""
+  },
+  ".oxlintrc.json": {
+    "mtime": 1789933335.3637035,
+    "ast_hash": "5e6e3cea3e89137071c142dd7835b0ef",
+    "semantic_hash": ""
+  },
+  "components.json": {
+    "mtime": 1789933703.5065541,
+    "ast_hash": "7c81e886e8df2eba8a3b89bbbe397f70",
+    "semantic_hash": ""
+  },
+  "jsconfig.json": {
+    "mtime": 1789933713.6953695,
+    "ast_hash": "2cb0ca159c86bb11ea86fc23ddc57c89",
+    "semantic_hash": ""
+  },
+  "package.json": {
+    "mtime": 1789933872.2503128,
+    "ast_hash": "5f87c5a44ec9f89f88e99cb1ec82bdd8",
+    "semantic_hash": ""
+  },
+  "src/App.jsx": {
+    "mtime": 1790017863.3262274,
+    "ast_hash": "988121e1012294af31f96553ecd9bd2c",
+    "semantic_hash": ""
+  },
+  "src/components/Projects.jsx": {
+    "mtime": 1790019650.27799,
+    "ast_hash": "7cfd4c5da29b6e2ca15ffc43e1bcce7c",
+    "semantic_hash": ""
+  },
+  "src/components/Topography.jsx": {
+    "mtime": 1789933964.6681361,
+    "ast_hash": "b7f711f0fd18663b927b5cffa092f4e2",
+    "semantic_hash": ""
+  },
+  "src/main.jsx": {
+    "mtime": 1789933335.3748193,
+    "ast_hash": "e13723e2574429d9a6d849727e3ff695",
+    "semantic_hash": ""
+  },
+  "src/v2/App.jsx": {
+    "mtime": 1790420182.46735,
+    "ast_hash": "c2969dc25bf5b35186d5845173687b83",
+    "semantic_hash": ""
+  },
+  "src/v2/main.jsx": {
+    "mtime": 1790019385.197546,
+    "ast_hash": "e13723e2574429d9a6d849727e3ff695",
+    "semantic_hash": ""
+  },
+  "vite.config.js": {
+    "mtime": 1790422409.3577733,
+    "ast_hash": "747297f2569fda394d9fa7e017e73ec1",
+    "semantic_hash": ""
+  },
+  "README.md": {
+    "mtime": 1789933335.3616426,
+    "ast_hash": "75eb386f17caf77fd6fe3ce1d90968ee",
+    "semantic_hash": ""
+  },
+  "index.html": {
+    "mtime": 1789933340.9034984,
+    "ast_hash": "927c0aea211c9543e25ce02192a4453a",
+    "semantic_hash": ""
+  },
+  "v2.html": {
+    "mtime": 1790420182.413409,
+    "ast_hash": "ec4fbde510f7ae710bd33aeff0f81768",
+    "semantic_hash": ""
+  },
+  "public/favicon.svg": {
+    "mtime": 1789933335.3658068,
+    "ast_hash": "7e840862161341271697daa99a40d76b",
+    "semantic_hash": ""
+  },
+  "public/icons.svg": {
+    "mtime": 1789933335.3669236,
+    "ast_hash": "3b4fcfcf393eca4d264dca4a4663bc37",
+    "semantic_hash": ""
+  },
+  "src/assets/hero.png": {
+    "mtime": 1789933335.3706658,
+    "ast_hash": "aead493361b27e7510691c5d7072dfc1",
+    "semantic_hash": ""
+  },
+  "src/assets/mc-fiduciaire/contact.webp": {
+    "mtime": 1790017203.7186952,
+    "ast_hash": "30020601d2003c0d594c2f0ea9604461",
+    "semantic_hash": ""
+  },
+  "src/assets/mc-fiduciaire/home.webp": {
+    "mtime": 1790017203.73394,
+    "ast_hash": "9f4e63c13eb6fd13615c434a5f4ad150",
+    "semantic_hash": ""
+  },
+  "src/assets/mc-fiduciaire/info.webp": {
+    "mtime": 1790017203.743596,
+    "ast_hash": "d8619c498bcf4a7f29a4b47299e314fb",
+    "semantic_hash": ""
+  },
+  "src/assets/mc-fiduciaire/team.webp": {
+    "mtime": 1790017203.7526298,
+    "ast_hash": "191830b40d25e6c6fbaa4df5adcc8f05",
+    "semantic_hash": ""
+  },
+  "src/assets/react.svg": {
+    "mtime": 1789933335.3717022,
+    "ast_hash": "f0402b67b6ce880f65666bb49e841696",
+    "semantic_hash": ""
+  },
+  "src/assets/vite.svg": {
+    "mtime": 1789933335.3727028,
+    "ast_hash": "9960a24288958394ac50e57ff638b036",
+    "semantic_hash": ""
+  },
+  ".claude-flow/harness-active-policy.json": {
+    "mtime": 1790281195.767211,
+    "ast_hash": "9d8a090e92e411da923e6859eaa0574e",
+    "semantic_hash": ""
+  },
+  ".claude-flow/policy/state.json": {
+    "mtime": 1790281214.2930367,
+    "ast_hash": "b1a929953b77c01707a688b30e18ef9f",
+    "semantic_hash": ""
+  },
+  ".claude/proven-config.json": {
+    "mtime": 1790281195.7642105,
+    "ast_hash": "fa867383115eb50bedfaa782152914bb",
+    "semantic_hash": ""
+  },
+  ".claude/security-scans/scan-all-standard.json": {
+    "mtime": 1790281201.1746895,
+    "ast_hash": "171fe7e9e59656f190a8a8bf6b38240b",
+    "semantic_hash": ""
+  },
+  "src/v2/Projects.jsx": {
+    "mtime": 1790411716.716173,
+    "ast_hash": "fa847e19efcf7908a33dadfc5c0a4e6f",
+    "semantic_hash": ""
+  },
+  "src/v2/Topography.jsx": {
+    "mtime": 1790346266.1834693,
+    "ast_hash": "7ad2c10d5171657dc6e4c59aa66af9a1",
+    "semantic_hash": ""
+  },
+  "v2-cookies.html": {
+    "mtime": 1790420182.4512317,
+    "ast_hash": "9adb0ae2b92ad7dcbedd2d592c749025",
+    "semantic_hash": ""
+  },
+  "v2-privacy.html": {
+    "mtime": 1790420182.4301393,
+    "ast_hash": "e0d916098eaad27bee1f90e6b40d49f2",
+    "semantic_hash": ""
+  },
+  "DESIGN.md": {
+    "mtime": 1790420202.9722464,
+    "ast_hash": "b58b6e9ea0c3431bd8a10456ca07609b",
+    "semantic_hash": ""
+  },
+  ".impeccable/config.json": {
+    "mtime": 1790367173.0606246,
+    "ast_hash": "df7f04932ba2b1e7371165c6600a1a66",
+    "semantic_hash": ""
+  },
+  ".impeccable/hook.cache.json": {
+    "mtime": 1790422517.6738608,
+    "ast_hash": "b858509c61c2ee46eecfd51f3b1f6db2",
+    "semantic_hash": ""
+  },
+  ".impeccable/critique/2026-09-25T08-14-41Z__v2-html.md": {
+    "mtime": 1790324081.492494,
+    "ast_hash": "08f74215a8521ce604f87ffdd3771f6e",
+    "semantic_hash": ""
+  },
+  "brand/business-card.png": {
+    "mtime": 1790420801.4875631,
+    "ast_hash": "5323447684772fec1e272d6d4d2c4dcd",
+    "semantic_hash": ""
+  },
+  "brand/logo-sheet.png": {
+    "mtime": 1790419345.7239115,
+    "ast_hash": "bd1f35908b3bba7100c348911e0effa4",
+    "semantic_hash": ""
+  },
+  "brand/poster.png": {
+    "mtime": 1790420801.5151227,
+    "ast_hash": "4e674d4158f01f2436b70af1389c8209",
+    "semantic_hash": ""
+  },
+  "public/v2-favicon.svg": {
+    "mtime": 1790420182.529986,
+    "ast_hash": "1178d2afa1984f30bc892670135ac795",
+    "semantic_hash": ""
+  },
+  "brand/build.mjs": {
+    "mtime": 1790422205.0172067,
+    "ast_hash": "462766d8b8367ca10de930cf77738f03",
+    "semantic_hash": ""
+  },
+  "brand/src/business-card.html": {
+    "mtime": 1790420621.0613508,
+    "ast_hash": "ba3423a86aaf6abe4990b505d4f7e46b",
+    "semantic_hash": ""
+  },
+  "brand/src/poster-a2.html": {
+    "mtime": 1790420623.8736792,
+    "ast_hash": "125462148e285334b651648675f5a475",
+    "semantic_hash": ""
+  },
+  "brand/print/business-card.pdf": {
+    "mtime": 1790422572.448175,
+    "ast_hash": "b2a6704aef868dcb34ae2a03540cb5a4",
+    "semantic_hash": ""
+  },
+  "brand/print/poster-a2.pdf": {
+    "mtime": 1790422574.4645581,
+    "ast_hash": "1b986d218093d7349c2ea09a9334f289",
+    "semantic_hash": ""
+  },
+  "src/assets/egma-construction/home.webp": {
+    "mtime": 1790411704.7111268,
+    "ast_hash": "a65c5869596650fce881cf710e1defc1",
+    "semantic_hash": ""
+  },
+  "src/assets/egma-construction/paving.webp": {
+    "mtime": 1790411704.7478595,
+    "ast_hash": "974775945db31693ca0ee44579b60a22",
+    "semantic_hash": ""
+  },
+  "src/assets/egma-construction/photo-viewer.webp": {
+    "mtime": 1790411704.777814,
+    "ast_hash": "d7122d46d98651f996c4021e03fc76e0",
+    "semantic_hash": ""
+  },
+  "brand/logo/andu-icon-48.png": {
+    "mtime": 1790422567.5055873,
+    "ast_hash": "85a7710e895726947760f981ecb20857",
+    "semantic_hash": ""
+  },
+  "brand/logo/andu-icon-512.png": {
+    "mtime": 1790422505.5238113,
+    "ast_hash": "4ef757755b83765181fdcd5e944678d7",
+    "semantic_hash": ""
+  },
+  "brand/logo/andu-icon-96.png": {
+    "mtime": 1790422506.5201914,
+    "ast_hash": "f13b68dec3143da86f03c1d0bdef4b0b",
+    "semantic_hash": ""
+  },
+  "brand/logo/andu-icon.svg": {
+    "mtime": 1790422504.8799534,
+    "ast_hash": "09dc1a61b373793bf18b93b175fd8dfa",
+    "semantic_hash": ""
+  },
+  "brand/logo/andu-lockup-on-dark.png": {
+    "mtime": 1790422501.360928,
+    "ast_hash": "d4ff3400610310c3733b39487c139a00",
+    "semantic_hash": ""
+  },
+  "brand/logo/andu-lockup-on-dark.svg": {
+    "mtime": 1790422500.6993713,
+    "ast_hash": "970590a291a50220b9e8c0416c8576ac",
+    "semantic_hash": ""
+  },
+  "brand/logo/andu-lockup-on-light.png": {
+    "mtime": 1790422502.4239843,
+    "ast_hash": "900ad7d6b393a91c0d62c8ae51138f15",
+    "semantic_hash": ""
+  },
+  "brand/logo/andu-lockup-on-light.svg": {
+    "mtime": 1790422501.7262492,
+    "ast_hash": "431e9de7e3b3dfbb1b094ca4fa18d9d9",
+    "semantic_hash": ""
+  },
+  "brand/logo/andu-mark-on-dark.png": {
+    "mtime": 1790422503.4876573,
+    "ast_hash": "f67bae97c1a38bd8547f2da11f0014ae",
+    "semantic_hash": ""
+  },
+  "brand/logo/andu-mark-on-dark.svg": {
+    "mtime": 1790422502.7771907,
+    "ast_hash": "87f1197c2737047576cdd63c3575d06b",
+    "semantic_hash": ""
+  },
+  "brand/logo/andu-mark-on-light.png": {
+    "mtime": 1790422504.5178564,
+    "ast_hash": "cd87be184a72087123209979a7119777",
+    "semantic_hash": ""
+  },
+  "brand/logo/andu-mark-on-light.svg": {
+    "mtime": 1790422503.8507428,
+    "ast_hash": "d7d25821a6c669c788f14fd441fedf6e",
+    "semantic_hash": ""
+  },
+  "brand/logo/andu-icon-32.png": {
+    "mtime": 1790422568.471578,
+    "ast_hash": "63bce6d9503365e68003771270bd3431",
+    "semantic_hash": ""
+  },
+  "brand/logo/andu-icon-16.png": {
+    "mtime": 1790422569.4547756,
+    "ast_hash": "ae04e379f5e2fe03cc8f828c3a6896e1",
+    "semantic_hash": ""
+  },
+  "brand/logo/andu-profile-picture.png": {
+    "mtime": 1790422570.4357212,
+    "ast_hash": "0480412904da34ce5be97ead3b63508a",
+    "semantic_hash": ""
+  },
+  "brand/logo/andu-profile-picture.svg": {
+    "mtime": 1790422569.832937,
+    "ast_hash": "d9cbc37841f16e3ae36eb2357feda13f",
+    "semantic_hash": ""
+  }
+}

@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>andu design business card, print source</title>
+<!--
+  Source of brand/print/business-card.pdf (build: node brand/build.mjs).
+  Trim 85 × 55 mm with 3 mm bleed on every side, drawn at 8 px per mm like the Stitch proof and zoomed to real size.
+  Text sits 5 mm (40 px) inside the trim. Every text element has class "t" so the build can swap it for outlines.
+-->
+<style>
+  @font-face { font-family: Geist; src: url("../../node_modules/@fontsource-variable/geist/files/geist-latin-wght-normal.woff2") format("woff2"); font-weight: 100 900; }
+  @page { size: 91mm 61mm; margin: 0; }
+  html, body { margin: 0; }
+  body { font-family: Geist, sans-serif; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .page { position: relative; width: 91mm; height: 61mm; overflow: hidden; background: #080b12; }
+  .page + .page { break-before: page; }
+  .art { position: absolute; left: 0; top: 0; width: 728px; height: 488px; zoom: 0.4724409; } /* 1 px = 0.125 mm */
+  .row { display: flex; align-items: center; gap: 14px; }
+</style>
+</head>
+<body>
+
+<!-- front -->
+<div class="page">
+  <div class="art">
+    <!-- the flowing lines from Stitch's first card draft, in the same spot; they run on into the bleed -->
+    <svg style="position: absolute; left: 244px; top: -6px; width: 500px; height: 500px; overflow: visible" viewBox="0 0 500 500" fill="none">
+      <defs><linearGradient id="lines" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#22d3ee"/></linearGradient></defs>
+      <g stroke="url(#lines)" stroke-width="1.5">
+        <path stroke-opacity=".25" d="M 120 480 C 180 430, 240 370, 310 390 C 370 410, 420 370, 490 320"/>
+        <path stroke-opacity=".28" d="M 150 440 C 205 385, 260 330, 325 350 C 380 370, 430 330, 500 270"/>
+        <path stroke-opacity=".30" d="M 180 400 C 230 340, 280 290, 340 310 C 390 330, 440 280, 510 220"/>
+        <path stroke-opacity=".33" d="M 210 360 C 255 295, 300 250, 355 270 C 405 290, 450 240, 515 175"/>
+        <path stroke-opacity=".36" d="M 240 315 C 280 250, 320 210, 370 230 C 415 250, 455 195, 520 130"/>
+        <path stroke-opacity=".38" d="M 270 270 C 305 205, 340 170, 385 190 C 425 210, 465 155, 525 85"/>
+        <path stroke-opacity=".40" d="M 300 225 C 330 160, 360 130, 400 150 C 435 170, 475 115, 530 40"/>
+        <path stroke-opacity=".35" d="M 330 180 C 355 115, 380 90, 415 110 C 445 130, 485 75, 535 -5"/>
+        <path stroke-opacity=".28" d="M 360 135 C 380 70, 400 50, 430 70 C 455 90, 495 35, 540 -50"/>
+        <path stroke-opacity=".25" d="M 390 90 C 405 25, 420 10, 445 30 C 465 50, 505 -5, 545 -95"/>
+      </g>
+    </svg>
+    <!-- the lines fade out towards the text (25% → 75% of the card width): Night laid over them, as in the draft's mask -->
+    <div style="position: absolute; inset: 0; background: linear-gradient(to right, #080b12 26.65%, rgba(8, 11, 18, 0.5) 48.13%, rgba(8, 11, 18, 0) 73.35%)"></div>
+
+    <!-- the lockup from brand/logo (text already outlined, mark centred on the x-height), at 27 px type: it is 1.045×
+         the type size tall. Rebuilding it from live text isn't exact, because at this small size Edge rounds the font's
+         line metrics and the text lands up to 0.06 em off. -->
+    <img src="../logo/andu-lockup-on-dark.svg" alt="" style="position: absolute; left: 64px; top: 64px; height: 28.2px">
+    <div class="t" style="position: absolute; left: 64px; bottom: 64px; font-size: 30px; font-weight: 500; line-height: 1.05; letter-spacing: -0.03em"><div style="color: #666970">Websites that</div><div style="color: #f4f7fc">grow your business</div></div>
+  </div>
+</div>
+
+<!-- back -->
+<div class="page">
+  <div class="art">
+    <!-- the proof's aurora glow as a plain gradient (a blur would print as a bitmap) -->
+    <div style="position: absolute; left: 444px; top: 204px; width: 400px; height: 400px; background: radial-gradient(closest-side, rgba(34, 211, 238, 0.16), rgba(124, 58, 237, 0.09) 45%, rgba(124, 58, 237, 0))"></div>
+
+    <svg style="position: absolute; left: 64px; top: 64px" width="24" height="30" viewBox="8 4 32 40" fill="none" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="adg-back" x1="12" y1="0" x2="36" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#7C3AED"/><stop offset="1" stop-color="#22D3EE"/></linearGradient></defs><path d="M15.4 41L24 19.5L32.6 41M20.8 41L24 33L27.2 41" stroke="url(#adg-back)" stroke-width="2"/><path d="M10 41L24 6L38 41" stroke="#F4F7FC" stroke-width="3"/></svg>
+
+    <!-- 22 px is 7.8 pt: the proof's 16 px would print at 5.7 pt, too small to read -->
+    <div style="position: absolute; left: 64px; bottom: 64px; display: grid; gap: 16px; font-size: 22px; line-height: 1.2; color: #f4f7fc">
+      <div class="row">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8a8d93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+        <span class="t">bucatariualexandru11@gmail.com</span>
+      </div>
+      <div class="row">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8a8d93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        <span class="t">+32 465 26 10 35</span>
+      </div>
+      <div class="row">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8a8d93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+        <span class="t">WhatsApp +40 725 791 791</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

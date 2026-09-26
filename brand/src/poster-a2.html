@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>andu design poster, print source</title>
+<!--
+  Source of brand/print/poster-a2.pdf (build: node brand/build.mjs).
+  A2 trim (420 × 594 mm) with 3 mm bleed on every side, drawn in the Stitch poster's px (1190 px across the trim,
+  1 px = 0.353 mm) and zoomed to real size. Every text element has class "t" so the build can swap it for outlines.
+-->
+<style>
+  @font-face { font-family: Geist; src: url("../../node_modules/@fontsource-variable/geist/files/geist-latin-wght-normal.woff2") format("woff2"); font-weight: 100 900; }
+  @page { size: 426mm 600mm; margin: 0; }
+  html, body { margin: 0; }
+  body { font-family: Geist, sans-serif; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .page { position: relative; width: 426mm; height: 600mm; overflow: hidden; background: #080b12; }
+  .art { position: absolute; left: 0; top: 0; width: 1207px; height: 1701px; zoom: 1.333951; } /* 420 mm / 1190 px */
+  .trim { position: absolute; left: 8.5px; top: 8.5px; width: 1190px; height: 1683px; }
+  .contact { display: flex; align-items: center; gap: 10px; }
+  .dot { color: #3a3e47; }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="art">
+    <div class="trim">
+      <!-- 22 contour lines from the Stitch poster, violet low to cyan high; they run on into the bleed -->
+      <svg style="position: absolute; left: 0; top: 0; width: 1190px; height: 850px; overflow: visible" viewBox="0 0 1190 850" fill="none" stroke-width="1.5">
+        <path stroke="#7C3AED" stroke-opacity="0.22" d="M-60 140 C 220 80, 420 420, 680 430 C 940 440, 1080 310, 1260 260"/>
+        <path stroke="#7C3AED" stroke-opacity="0.23" d="M-60 165 C 225 105, 425 435, 685 445 C 945 455, 1080 330, 1260 285"/>
+        <path stroke="#7C3AED" stroke-opacity="0.24" d="M-60 190 C 230 130, 430 450, 690 460 C 950 470, 1080 350, 1260 310"/>
+        <path stroke="#7C3AED" stroke-opacity="0.25" d="M-60 215 C 235 155, 435 465, 695 475 C 955 485, 1085 370, 1260 335"/>
+        <path stroke="#7C3AED" stroke-opacity="0.26" d="M-60 240 C 240 180, 440 480, 700 490 C 960 500, 1090 390, 1260 360"/>
+        <path stroke="#7C3AED" stroke-opacity="0.27" d="M-60 265 C 245 205, 445 495, 705 505 C 965 515, 1095 410, 1260 385"/>
+        <path stroke="#6D46EA" stroke-opacity="0.29" d="M-60 290 C 250 230, 450 510, 710 520 C 970 530, 1100 430, 1260 410"/>
+        <path stroke="#5F52E7" stroke-opacity="0.30" d="M-60 315 C 255 255, 455 525, 715 535 C 975 545, 1105 450, 1260 435"/>
+        <path stroke="#525DE5" stroke-opacity="0.31" d="M-60 340 C 260 280, 460 540, 720 550 C 980 560, 1110 470, 1260 460"/>
+        <path stroke="#486BE2" stroke-opacity="0.32" d="M-60 365 C 265 305, 465 555, 725 565 C 985 575, 1115 490, 1260 485"/>
+        <path stroke="#3F79E0" stroke-opacity="0.34" d="M-60 390 C 270 330, 470 570, 730 580 C 990 590, 1120 510, 1260 510"/>
+        <path stroke="#3687DE" stroke-opacity="0.35" d="M-60 415 C 275 355, 475 585, 735 595 C 995 605, 1125 530, 1260 535"/>
+        <path stroke="#2D95DB" stroke-opacity="0.36" d="M-60 440 C 280 380, 480 600, 740 610 C 1000 620, 1130 550, 1260 560"/>
+        <path stroke="#26A3D9" stroke-opacity="0.38" d="M-60 465 C 285 405, 485 615, 745 625 C 1005 635, 1135 570, 1260 585"/>
+        <path stroke="#22B1D7" stroke-opacity="0.39" d="M-60 490 C 290 430, 490 630, 750 640 C 1010 650, 1140 590, 1260 610"/>
+        <path stroke="#21BFD5" stroke-opacity="0.40" d="M-60 515 C 295 455, 495 645, 755 655 C 1015 665, 1145 610, 1260 635"/>
+        <path stroke="#21CDD4" stroke-opacity="0.41" d="M-60 540 C 300 480, 500 660, 760 670 C 1020 680, 1150 630, 1260 660"/>
+        <path stroke="#22D3EE" stroke-opacity="0.42" d="M-60 565 C 305 505, 505 675, 765 685 C 1025 695, 1155 650, 1260 685"/>
+        <path stroke="#22D3EE" stroke-opacity="0.43" d="M-60 590 C 310 530, 510 690, 770 700 C 1030 710, 1160 670, 1260 710"/>
+        <path stroke="#22D3EE" stroke-opacity="0.44" d="M-60 615 C 315 555, 515 705, 775 715 C 1035 725, 1165 690, 1260 735"/>
+        <path stroke="#22D3EE" stroke-opacity="0.45" d="M-60 640 C 320 580, 520 720, 780 730 C 1040 740, 1170 710, 1260 760"/>
+        <path stroke="#22D3EE" stroke-opacity="0.45" d="M-60 665 C 325 605, 525 735, 785 745 C 1045 755, 1175 730, 1260 785"/>
+      </svg>
+      <!-- the lines fade out downwards (the Stitch mask): Night laid over them -->
+      <div style="position: absolute; left: -8.5px; top: 0; width: 1207px; height: 850px; background: linear-gradient(rgba(8, 11, 18, 0), rgba(8, 11, 18, 0.2) 65%, #080b12)"></div>
+      <!-- the two aurora pools as plain gradients (a blur would print as a bitmap) -->
+      <div style="position: absolute; left: -90px; top: -270px; width: 950px; height: 850px; background: radial-gradient(closest-side, rgba(124, 58, 237, 0.14), rgba(124, 58, 237, 0.1) 40%, rgba(124, 58, 237, 0))"></div>
+      <div style="position: absolute; left: 390px; top: -80px; width: 920px; height: 820px; background: radial-gradient(closest-side, rgba(34, 211, 238, 0.1), rgba(34, 211, 238, 0.07) 40%, rgba(34, 211, 238, 0))"></div>
+
+      <!-- the lockup from brand/logo (text already outlined, mark centred on the x-height), at 32 px type: it is 1.045×
+           the type size tall. Live text isn't exact here, because Edge rounds the font's line metrics at small sizes. -->
+      <img src="../logo/andu-lockup-on-dark.svg" alt="" style="position: absolute; left: 80px; top: 80px; height: 33.44px">
+
+      <div style="position: absolute; left: 80px; right: 80px; bottom: 80px">
+        <h1 class="t" style="margin: 0; font-size: 118px; font-weight: 500; line-height: 1; letter-spacing: -0.035em"><span style="display: block; color: #666970">Websites that</span><span style="display: block; color: #f4f7fc">grow your business.</span></h1>
+        <p class="t" style="margin: 40px 0 0; max-width: 760px; font-size: 28px; line-height: 1.4; color: #b2b5ba">We design and build websites for real businesses: multilingual, clear, and made to bring in clients.</p>
+        <div style="margin-top: 64px; padding-top: 36px; border-top: 1px solid #24272e">
+          <div class="t" style="font-size: 44px; font-weight: 500; line-height: 1.25; letter-spacing: -0.025em; color: #f4f7fc">Let’s build your website.</div>
+          <div style="margin-top: 20px; display: flex; align-items: center; gap: 32px; font-size: 20px; color: #b2b5ba">
+            <div class="contact">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8a8d93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+              <span class="t">bucatariualexandru11@gmail.com</span>
+            </div>
+            <span class="t dot">·</span>
+            <div class="contact">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8a8d93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <span class="t">+32 465 26 10 35</span>
+            </div>
+            <span class="t dot">·</span>
+            <div class="contact">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8a8d93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+              <span class="t">WhatsApp +40 725 791 791</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

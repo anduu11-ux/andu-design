@@ -1,0 +1,207 @@
+{
+  ".claude/launch.json": {
+    "mtime": 1790014892.813016,
+    "ast_hash": "13d552e9d6e18a8c558c5ad407e91708",
+    "semantic_hash": ""
+  },
+  ".oxlintrc.json": {
+    "mtime": 1789933335.3637035,
+    "ast_hash": "5e6e3cea3e89137071c142dd7835b0ef",
+    "semantic_hash": ""
+  },
+  "components.json": {
+    "mtime": 1789933703.5065541,
+    "ast_hash": "7c81e886e8df2eba8a3b89bbbe397f70",
+    "semantic_hash": ""
+  },
+  "jsconfig.json": {
+    "mtime": 1789933713.6953695,
+    "ast_hash": "2cb0ca159c86bb11ea86fc23ddc57c89",
+    "semantic_hash": ""
+  },
+  "package.json": {
+    "mtime": 1789933872.2503128,
+    "ast_hash": "5f87c5a44ec9f89f88e99cb1ec82bdd8",
+    "semantic_hash": ""
+  },
+  "src/App.jsx": {
+    "mtime": 1790017863.3262274,
+    "ast_hash": "988121e1012294af31f96553ecd9bd2c",
+    "semantic_hash": ""
+  },
+  "src/components/Projects.jsx": {
+    "mtime": 1790019650.27799,
+    "ast_hash": "7cfd4c5da29b6e2ca15ffc43e1bcce7c",
+    "semantic_hash": ""
+  },
+  "src/components/Topography.jsx": {
+    "mtime": 1789933964.6681361,
+    "ast_hash": "b7f711f0fd18663b927b5cffa092f4e2",
+    "semantic_hash": ""
+  },
+  "src/main.jsx": {
+    "mtime": 1789933335.3748193,
+    "ast_hash": "e13723e2574429d9a6d849727e3ff695",
+    "semantic_hash": ""
+  },
+  "src/v2/App.jsx": {
+    "mtime": 1790347457.1191356,
+    "ast_hash": "72ad22577e369ccf957cd8ceaf67950d",
+    "semantic_hash": ""
+  },
+  "src/v2/main.jsx": {
+    "mtime": 1790019385.197546,
+    "ast_hash": "e13723e2574429d9a6d849727e3ff695",
+    "semantic_hash": ""
+  },
+  "vite.config.js": {
+    "mtime": 1790281295.2171671,
+    "ast_hash": "fbc44398c79231edb0148c0a20da3cfe",
+    "semantic_hash": ""
+  },
+  "README.md": {
+    "mtime": 1789933335.3616426,
+    "ast_hash": "75eb386f17caf77fd6fe3ce1d90968ee",
+    "semantic_hash": ""
+  },
+  "index.html": {
+    "mtime": 1789933340.9034984,
+    "ast_hash": "927c0aea211c9543e25ce02192a4453a",
+    "semantic_hash": ""
+  },
+  "v2.html": {
+    "mtime": 1790364258.4809532,
+    "ast_hash": "0d86e5b5170fd6b3d483354b09601b64",
+    "semantic_hash": ""
+  },
+  "public/favicon.svg": {
+    "mtime": 1789933335.3658068,
+    "ast_hash": "7e840862161341271697daa99a40d76b",
+    "semantic_hash": ""
+  },
+  "public/icons.svg": {
+    "mtime": 1789933335.3669236,
+    "ast_hash": "3b4fcfcf393eca4d264dca4a4663bc37",
+    "semantic_hash": ""
+  },
+  "src/assets/hero.png": {
+    "mtime": 1789933335.3706658,
+    "ast_hash": "aead493361b27e7510691c5d7072dfc1",
+    "semantic_hash": ""
+  },
+  "src/assets/mc-fiduciaire/contact.webp": {
+    "mtime": 1790017203.7186952,
+    "ast_hash": "30020601d2003c0d594c2f0ea9604461",
+    "semantic_hash": ""
+  },
+  "src/assets/mc-fiduciaire/home.webp": {
+    "mtime": 1790017203.73394,
+    "ast_hash": "9f4e63c13eb6fd13615c434a5f4ad150",
+    "semantic_hash": ""
+  },
+  "src/assets/mc-fiduciaire/info.webp": {
+    "mtime": 1790017203.743596,
+    "ast_hash": "d8619c498bcf4a7f29a4b47299e314fb",
+    "semantic_hash": ""
+  },
+  "src/assets/mc-fiduciaire/team.webp": {
+    "mtime": 1790017203.7526298,
+    "ast_hash": "191830b40d25e6c6fbaa4df5adcc8f05",
+    "semantic_hash": ""
+  },
+  "src/assets/react.svg": {
+    "mtime": 1789933335.3717022,
+    "ast_hash": "f0402b67b6ce880f65666bb49e841696",
+    "semantic_hash": ""
+  },
+  "src/assets/vite.svg": {
+    "mtime": 1789933335.3727028,
+    "ast_hash": "9960a24288958394ac50e57ff638b036",
+    "semantic_hash": ""
+  },
+  ".claude-flow/harness-active-policy.json": {
+    "mtime": 1790281195.767211,
+    "ast_hash": "9d8a090e92e411da923e6859eaa0574e",
+    "semantic_hash": ""
+  },
+  ".claude-flow/policy/state.json": {
+    "mtime": 1790281214.2930367,
+    "ast_hash": "b1a929953b77c01707a688b30e18ef9f",
+    "semantic_hash": ""
+  },
+  ".claude/proven-config.json": {
+    "mtime": 1790281195.7642105,
+    "ast_hash": "fa867383115eb50bedfaa782152914bb",
+    "semantic_hash": ""
+  },
+  ".claude/security-scans/scan-all-standard.json": {
+    "mtime": 1790281201.1746895,
+    "ast_hash": "171fe7e9e59656f190a8a8bf6b38240b",
+    "semantic_hash": ""
+  },
+  "src/v2/Projects.jsx": {
+    "mtime": 1790346339.3975644,
+    "ast_hash": "8ec3655848300bf77f336714d93bbb99",
+    "semantic_hash": ""
+  },
+  "src/v2/Topography.jsx": {
+    "mtime": 1790346266.1834693,
+    "ast_hash": "7ad2c10d5171657dc6e4c59aa66af9a1",
+    "semantic_hash": ""
+  },
+  "v2-cookies.html": {
+    "mtime": 1790364258.5343795,
+    "ast_hash": "16444ea093d48bd34b54beb715b9957c",
+    "semantic_hash": ""
+  },
+  "v2-privacy.html": {
+    "mtime": 1790364258.5137935,
+    "ast_hash": "6462ba589e776836ee368bf080f95fb4",
+    "semantic_hash": ""
+  },
+  "DESIGN.md": {
+    "mtime": 1790364472.603174,
+    "ast_hash": "1f535497c26921ef3d46809a88e72697",
+    "semantic_hash": ""
+  },
+  ".impeccable/config.json": {
+    "mtime": 1790325796.3988276,
+    "ast_hash": "da82181ada86e3276005480fde5366c3",
+    "semantic_hash": ""
+  },
+  ".impeccable/hook.cache.json": {
+    "mtime": 1790353797.6284847,
+    "ast_hash": "c9b030348db1254b557e62ad851b7990",
+    "semantic_hash": ""
+  },
+  ".impeccable/critique/2026-09-25T08-14-41Z__v2-html.md": {
+    "mtime": 1790324081.492494,
+    "ast_hash": "08f74215a8521ce604f87ffdd3771f6e",
+    "semantic_hash": ""
+  },
+  "brand/av-mark.svg": {
+    "mtime": 1790364392.3762705,
+    "ast_hash": "42685fd6a7b80576083357a0aa469d13",
+    "semantic_hash": ""
+  },
+  "brand/business-card.png": {
+    "mtime": 1790364259.459159,
+    "ast_hash": "9a00bce09b9a73691be8140b69a6d9ae",
+    "semantic_hash": ""
+  },
+  "brand/logo-sheet.png": {
+    "mtime": 1790364259.1707275,
+    "ast_hash": "a438e12bf9d85c64177cb800402ee710",
+    "semantic_hash": ""
+  },
+  "brand/poster.png": {
+    "mtime": 1790364428.2086263,
+    "ast_hash": "1384d572c97ab94555de39724ffb233a",
+    "semantic_hash": ""
+  },
+  "public/v2-favicon.svg": {
+    "mtime": 1790364242.6108775,
+    "ast_hash": "e1d976a210ddcde1b365e9a76b4ed613",
+    "semantic_hash": ""
+  }
+}

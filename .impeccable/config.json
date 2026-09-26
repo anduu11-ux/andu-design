@@ -1,0 +1,95 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "design-system-font",
+        "value": "geist variable",
+        "createdAt": "2026-09-25T08:31:56.739Z",
+        "reason": "claude: @fontsource-variable/geist registers the Geist family (declared in DESIGN.md) under the name 'Geist Variable'; same font, naming only"
+      },
+      {
+        "rule": "flat-type-hierarchy",
+        "value": "*",
+        "files": [
+          "v2-privacy.html"
+        ],
+        "createdAt": "2026-09-25T08:43:16.150Z",
+        "reason": "claude: static scan can't resolve the linked /src/v2/index.css and reads every size as 16px; browser measures h1 58px, h2 22px, body 16px"
+      },
+      {
+        "rule": "flat-type-hierarchy",
+        "value": "*",
+        "files": [
+          "v2-cookies.html"
+        ],
+        "createdAt": "2026-09-25T08:43:16.399Z",
+        "reason": "claude: static scan can't resolve the linked /src/v2/index.css and reads every size as 16px; browser measures h1 58px, h2 22px, body 16px"
+      },
+      {
+        "rule": "clipped-overflow-container",
+        "value": "*",
+        "files": [
+          "brand/src/poster-a2.html"
+        ],
+        "createdAt": "2026-09-25T20:04:11.760Z",
+        "reason": "claude: print artboard; .page is the physical sheet including 3 mm bleed and must clip the artwork at the bleed edge; there are no tooltips or menus"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "brand/src/business-card.html"
+        ],
+        "createdAt": "2026-09-25T20:12:51.468Z",
+        "reason": "claude: print artboard; the flagged child is the full-bleed art layer inside .page (the sheet incl. 3 mm bleed); all text sits 5 mm inside the trim, the print safe zone"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "brand/src/poster-a2.html"
+        ],
+        "createdAt": "2026-09-25T20:12:51.781Z",
+        "reason": "claude: print artboard; the flagged child is the full-bleed art layer inside .page; all text sits 80 px (28 mm) inside the trim"
+      },
+      {
+        "rule": "radial-spotlight-glow",
+        "value": "*",
+        "files": [
+          "brand/src/business-card.html"
+        ],
+        "createdAt": "2026-09-25T20:12:52.101Z",
+        "reason": "claude: DESIGN.md defines the faint violet/cyan aurora pools as brand light; carried over from the Stitch card"
+      },
+      {
+        "rule": "radial-spotlight-glow",
+        "value": "*",
+        "files": [
+          "brand/src/poster-a2.html"
+        ],
+        "createdAt": "2026-09-25T20:12:52.413Z",
+        "reason": "claude: DESIGN.md defines the two faint violet/cyan aurora pools as brand light; carried over from the Stitch poster"
+      },
+      {
+        "rule": "overused-font",
+        "value": "geist",
+        "files": [
+          "brand/src/business-card.html"
+        ],
+        "createdAt": "2026-09-25T20:12:52.749Z",
+        "reason": "claude: DESIGN.md sets Geist as the one family; the logo wordmark is Geist"
+      },
+      {
+        "rule": "overused-font",
+        "value": "geist",
+        "files": [
+          "brand/src/poster-a2.html"
+        ],
+        "createdAt": "2026-09-25T20:12:53.060Z",
+        "reason": "claude: DESIGN.md sets Geist as the one family; the logo wordmark is Geist"
+      }
+    ]
+  }
+}

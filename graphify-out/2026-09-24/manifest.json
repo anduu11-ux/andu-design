@@ -1,0 +1,122 @@
+{
+  ".claude/launch.json": {
+    "mtime": 1790014892.813016,
+    "ast_hash": "13d552e9d6e18a8c558c5ad407e91708",
+    "semantic_hash": ""
+  },
+  ".oxlintrc.json": {
+    "mtime": 1789933335.3637035,
+    "ast_hash": "5e6e3cea3e89137071c142dd7835b0ef",
+    "semantic_hash": ""
+  },
+  "components.json": {
+    "mtime": 1789933703.5065541,
+    "ast_hash": "7c81e886e8df2eba8a3b89bbbe397f70",
+    "semantic_hash": ""
+  },
+  "jsconfig.json": {
+    "mtime": 1789933713.6953695,
+    "ast_hash": "2cb0ca159c86bb11ea86fc23ddc57c89",
+    "semantic_hash": ""
+  },
+  "package.json": {
+    "mtime": 1789933872.2503128,
+    "ast_hash": "5f87c5a44ec9f89f88e99cb1ec82bdd8",
+    "semantic_hash": ""
+  },
+  "src/App.jsx": {
+    "mtime": 1790017863.3262274,
+    "ast_hash": "988121e1012294af31f96553ecd9bd2c",
+    "semantic_hash": ""
+  },
+  "src/components/Projects.jsx": {
+    "mtime": 1790019650.27799,
+    "ast_hash": "7cfd4c5da29b6e2ca15ffc43e1bcce7c",
+    "semantic_hash": ""
+  },
+  "src/components/Topography.jsx": {
+    "mtime": 1789933964.6681361,
+    "ast_hash": "b7f711f0fd18663b927b5cffa092f4e2",
+    "semantic_hash": ""
+  },
+  "src/main.jsx": {
+    "mtime": 1789933335.3748193,
+    "ast_hash": "e13723e2574429d9a6d849727e3ff695",
+    "semantic_hash": ""
+  },
+  "src/v2/App.jsx": {
+    "mtime": 1790019620.3942688,
+    "ast_hash": "b696becb5364c837eda1e9854aba69e6",
+    "semantic_hash": ""
+  },
+  "src/v2/main.jsx": {
+    "mtime": 1790019385.197546,
+    "ast_hash": "e13723e2574429d9a6d849727e3ff695",
+    "semantic_hash": ""
+  },
+  "vite.config.js": {
+    "mtime": 1790019651.6615899,
+    "ast_hash": "80e1bde96bffa03ad4718f5bfe792448",
+    "semantic_hash": ""
+  },
+  "README.md": {
+    "mtime": 1789933335.3616426,
+    "ast_hash": "75eb386f17caf77fd6fe3ce1d90968ee",
+    "semantic_hash": ""
+  },
+  "index.html": {
+    "mtime": 1789933340.9034984,
+    "ast_hash": "927c0aea211c9543e25ce02192a4453a",
+    "semantic_hash": ""
+  },
+  "v2.html": {
+    "mtime": 1790019384.1075716,
+    "ast_hash": "6844fa1c7f434f625dd6730b3374c64e",
+    "semantic_hash": ""
+  },
+  "public/favicon.svg": {
+    "mtime": 1789933335.3658068,
+    "ast_hash": "7e840862161341271697daa99a40d76b",
+    "semantic_hash": ""
+  },
+  "public/icons.svg": {
+    "mtime": 1789933335.3669236,
+    "ast_hash": "3b4fcfcf393eca4d264dca4a4663bc37",
+    "semantic_hash": ""
+  },
+  "src/assets/hero.png": {
+    "mtime": 1789933335.3706658,
+    "ast_hash": "aead493361b27e7510691c5d7072dfc1",
+    "semantic_hash": ""
+  },
+  "src/assets/mc-fiduciaire/contact.webp": {
+    "mtime": 1790017203.7186952,
+    "ast_hash": "30020601d2003c0d594c2f0ea9604461",
+    "semantic_hash": ""
+  },
+  "src/assets/mc-fiduciaire/home.webp": {
+    "mtime": 1790017203.73394,
+    "ast_hash": "9f4e63c13eb6fd13615c434a5f4ad150",
+    "semantic_hash": ""
+  },
+  "src/assets/mc-fiduciaire/info.webp": {
+    "mtime": 1790017203.743596,
+    "ast_hash": "d8619c498bcf4a7f29a4b47299e314fb",
+    "semantic_hash": ""
+  },
+  "src/assets/mc-fiduciaire/team.webp": {
+    "mtime": 1790017203.7526298,
+    "ast_hash": "191830b40d25e6c6fbaa4df5adcc8f05",
+    "semantic_hash": ""
+  },
+  "src/assets/react.svg": {
+    "mtime": 1789933335.3717022,
+    "ast_hash": "f0402b67b6ce880f65666bb49e841696",
+    "semantic_hash": ""
+  },
+  "src/assets/vite.svg": {
+    "mtime": 1789933335.3727028,
+    "ast_hash": "9960a24288958394ac50e57ff638b036",
+    "semantic_hash": ""
+  }
+}
