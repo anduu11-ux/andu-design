@@ -17,7 +17,11 @@ const projects = [
     summary:
       'An accounting firm with 500+ clients. We built the website that welcomes each of them in their own language and puts a face on the people behind the numbers.',
     // ponytail: a real quote from the client, used with their OK; nulls render as placeholders
-    quote: { text: null, name: null, role: null },
+    quote: {
+      text: 'A truly beautiful collaboration, and honestly, one of the best experiences I have had in creating the website for MC Fiduciaire. He was very patient with all my ideas and changes. He listened to what I wanted, understood my vision, and turned it into a website that very well represents the image of the company. I really appreciated his professionalism, commitment, and the fact that he was always open to finding the best solution together. I am very happy with the final result and would definitely collaborate with him again. I highly recommend him with great pleasure and trust!',
+      name: 'Jana C',
+      role: 'Secretary',
+    },
     features: [
       {
         icon: Languages,
