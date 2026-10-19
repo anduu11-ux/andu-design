@@ -1,0 +1,934 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>andu design promo, video source</title>
+<!--
+  Source of brand/video/andu-promo-9x16.mp4 (TikTok, Reels, Shorts) and andu-promo-16x9.mp4 (render: node brand/promo.mjs).
+  A 31-second kinetic-type promo in the Contour look: Night, white type in two tones, the hero's contour lines as light.
+
+  Every frame is a pure function of time (promo.seek), so the render is frame-exact, and the page also plays live:
+  open it in Edge, press F for full screen and R to restart, then screen-record it or film the laptop.
+  Space pauses, the arrow keys step a second, ?t=12.5 freezes on a frame, and ?format=9x16 or ?format=16x9 picks
+  the shape (otherwise the window's shape decides).
+-->
+<link rel="stylesheet" href="../../node_modules/@fontsource-variable/geist/index.css">
+<style>
+  :root {
+    --night: #080b12;
+    --paper: #f4f7fc;
+    --muted: rgba(244, 247, 252, 0.55);
+    --dim: rgba(244, 247, 252, 0.4); /* the quiet half of a two-tone headline: large type only */
+    --hair: rgba(244, 247, 252, 0.1);
+  }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #000; }
+  body { font-family: 'Geist Variable', system-ui, sans-serif; color: var(--paper); -webkit-font-smoothing: antialiased; font-synthesis: none; }
+  svg.i { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+
+  #stage { position: absolute; left: 0; top: 0; overflow: hidden; background: var(--night); transform-origin: 0 0; }
+  /* #world carries the camera shake, so it's the scenes' containing block: it must fill the stage */
+  #contours, #fx, #world { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+  /* the two aurora pools the site hands over to as you scroll */
+  .pool { position: absolute; width: calc(var(--u) * 130); height: calc(var(--u) * 110); margin: calc(var(--u) * -55) 0 0 calc(var(--u) * -65); border-radius: 50%; }
+  #pool-v { background: radial-gradient(closest-side, rgba(124, 58, 237, 0.17), rgba(124, 58, 237, 0.1) 40%, rgba(124, 58, 237, 0)); }
+  #scrim { width: calc(var(--u) * 150); height: calc(var(--u) * 120); margin: calc(var(--u) * -60) 0 0 calc(var(--u) * -75); background: radial-gradient(closest-side, rgba(8, 11, 18, 0.88), rgba(8, 11, 18, 0.7) 45%, rgba(8, 11, 18, 0)); }
+  #pool-c { background: radial-gradient(closest-side, rgba(34, 211, 238, 0.11), rgba(34, 211, 238, 0.07) 40%, rgba(34, 211, 238, 0)); }
+
+  /* a scene fills the stage; its column sits on one left edge, a little above centre (the optical centre, and clear of a phone's captions) */
+  .scene { position: absolute; left: 0; top: 0; width: 100%; height: 90%; box-sizing: border-box; padding-left: var(--left); display: flex; flex-direction: column; justify-content: center; visibility: hidden; }
+  .col { position: relative; width: var(--col); }
+  h1, h2, h3, p, ul { margin: 0; padding: 0; font-weight: 500; }
+  ul { list-style: none; }
+
+  .two { letter-spacing: -0.035em; line-height: 1.04; }
+  .two > span { display: block; white-space: nowrap; }
+  [style*="--fs"] { font-size: calc(var(--u) * var(--fs)); }
+  .dim { color: var(--dim); }
+  /* lit: white with a little violet and cyan light behind it, turned up on the beats (--g) */
+  .lit { color: var(--paper); text-shadow: 0 0 0.4em rgb(124 58 237 / calc(var(--g, 0) * 0.55)), 0 0 0.12em rgb(34 211 238 / calc(var(--g, 0) * 0.35)); }
+  .w { display: inline-block; white-space: pre; }
+
+  /* the site's glass frame for screenshots, at video scale */
+  .glass { box-sizing: border-box; overflow: hidden; border: 1px solid rgba(244, 247, 252, 0.08); border-radius: calc(var(--u) * 1.2); background: #0d1119;
+    box-shadow: 0 0 0 calc(var(--u) * 0.8) rgba(244, 247, 252, 0.035), 0 0 0 calc(var(--u) * 0.8 + 1px) rgba(244, 247, 252, 0.09), 0 calc(var(--u) * 4) calc(var(--u) * 8) calc(var(--u) * -3) rgba(0, 0, 0, 0.8); }
+  .glass img, img.glass { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+
+  /* 1 */
+  .underline { position: absolute; left: 0; bottom: -0.1em; width: 100%; height: calc(var(--u) * 0.55); border-radius: 9px; background: linear-gradient(90deg, #7c3aed, #22d3ee); box-shadow: 0 0 calc(var(--u) * 2) rgba(34, 211, 238, 0.45); transform-origin: left; }
+
+  /* 2 + 3 */
+  .slot { position: relative; width: var(--slot-w); height: var(--slot-h); }
+  .morph { position: absolute; left: 0; width: 100%; border-color: rgba(244, 247, 252, var(--edge, 0.14)); }
+  .morph img { position: absolute; inset: 0; transform-origin: 50% 20%; }
+  .search { position: absolute; inset: 0; display: flex; align-items: center; gap: calc(var(--u) * 2); padding-left: calc(var(--u) * 3.2); font-size: calc(var(--u) * 4.4); font-weight: 400; letter-spacing: -0.01em; white-space: nowrap; }
+  .search .i { color: var(--muted); stroke-width: 2.2; }
+  .caret { display: inline-block; width: calc(var(--u) * 0.32); height: 1.15em; margin-left: calc(var(--u) * 0.2); background: var(--paper); vertical-align: -0.2em; border-radius: 2px; }
+  .caption { position: absolute; left: 0; top: calc(100% + var(--u) * 3.4); }
+  .caption h3 { display: flex; align-items: center; gap: calc(var(--u) * 2); font-size: calc(var(--u) * 5); letter-spacing: -0.03em; line-height: 1.1; }
+  .caption p { margin-top: calc(var(--u) * 1.2); font-size: calc(var(--u) * 3); font-weight: 400; color: var(--muted); }
+  .domain { display: inline-flex; align-items: center; gap: calc(var(--u) * 0.6); padding: calc(var(--u) * 0.7) calc(var(--u) * 1.2) calc(var(--u) * 0.7) calc(var(--u) * 1.6); border: 1px solid rgba(244, 247, 252, 0.16); border-radius: 99px; font-size: calc(var(--u) * 2.4); font-weight: 400; letter-spacing: 0; color: #b2b5ba; }
+  .plane { position: absolute; transform-origin: 50% 50%; }
+  .plane .glass { position: absolute; }
+  .over { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; }
+
+  /* 4 */
+  .reel { position: relative; }
+  .reel > span { display: block; }
+  .reel > span + span { position: absolute; left: 0; top: 0; }
+  .langs { margin-top: calc(var(--u) * 4.5); max-width: calc(var(--u) * 76); font-size: calc(var(--u) * 3.4); font-weight: 400; line-height: 1.6; color: rgba(244, 247, 252, 0.3); }
+  .langs i { font-style: normal; padding: 0 0.15em; }
+  .langs span { color: var(--paper); opacity: var(--on, 0.45); }
+  .sub { margin-top: calc(var(--u) * 2.4); font-size: calc(var(--u) * 4.6); font-weight: 400; letter-spacing: -0.01em; color: var(--muted); }
+  .toasts { margin-top: calc(var(--u) * 6); display: grid; gap: calc(var(--u) * 2); width: min(100%, calc(var(--u) * 78)); }
+  .toast { display: flex; align-items: center; gap: calc(var(--u) * 2.6); padding: calc(var(--u) * 2.6) calc(var(--u) * 3); border: 1px solid var(--hair); border-radius: calc(var(--u) * 2.4); background: rgba(244, 247, 252, 0.05); }
+  .toast b { display: block; font-size: calc(var(--u) * 3.8); font-weight: 500; letter-spacing: -0.015em; }
+  .toast span { display: block; margin-top: calc(var(--u) * 0.6); font-size: calc(var(--u) * 3.2); color: var(--muted); }
+  .toast time { margin-left: auto; align-self: flex-start; font-size: calc(var(--u) * 2.8); color: var(--muted); }
+  .chip { display: grid; place-items: center; width: calc(var(--u) * 8); height: calc(var(--u) * 8); flex: none; border: 1px solid rgba(244, 247, 252, 0.14); border-radius: calc(var(--u) * 1.6); font-size: calc(var(--u) * 3.8); color: #b2b5ba; }
+
+  /* 5 */
+  .diy { margin-top: calc(var(--u) * 6); display: flex; gap: calc(var(--u) * 6); align-items: flex-end; }
+  .tasks { display: grid; gap: calc(var(--u) * 1.5); }
+  .tasks li { width: max-content; padding: calc(var(--u) * 1.7) calc(var(--u) * 2.8); border: 1px solid var(--hair); border-radius: calc(var(--u) * 1.6); background: rgba(244, 247, 252, 0.04); font-size: calc(var(--u) * 4); font-weight: 400; letter-spacing: -0.01em; color: #b2b5ba; }
+  .weekends { padding-bottom: calc(var(--u) * 0.6); }
+  .weekends span { display: block; font-size: calc(var(--u) * 3.6); color: var(--muted); }
+  .weekends b { display: block; transform-origin: left bottom; font-size: calc(var(--u) * 16); font-weight: 500; line-height: 1; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
+  .v .diy { flex-direction: column; align-items: flex-start; gap: calc(var(--u) * 5); }
+  .v .weekends { display: flex; align-items: baseline; gap: calc(var(--u) * 2.4); }
+
+  /* 6 */
+  .chat { width: min(100%, calc(var(--u) * 86)); margin-top: calc(var(--u) * 6); display: flex; flex-direction: column; gap: calc(var(--u) * 2.4); }
+  .bubble { box-sizing: border-box; font-size: calc(var(--u) * 4); line-height: 1.35; letter-spacing: -0.01em; font-weight: 400; padding: calc(var(--u) * 2) calc(var(--u) * 2.8); border-radius: calc(var(--u) * 3.4); }
+  .sent { transform-origin: right bottom; align-self: flex-end; max-width: 80%; background: var(--paper); color: var(--night); border-bottom-right-radius: calc(var(--u) * 0.9); }
+  .reply { align-self: flex-start; max-width: 92%; }
+  .who { display: flex; align-items: center; gap: calc(var(--u) * 1); margin: 0 0 calc(var(--u) * 1.2) calc(var(--u) * 0.6); font-size: calc(var(--u) * 3); font-weight: 600; letter-spacing: -0.02em; }
+  .who svg { width: calc(var(--u) * 3.4); height: calc(var(--u) * 3.4); }
+  .got { position: relative; overflow: hidden; white-space: nowrap; background: rgba(244, 247, 252, 0.06); border: 1px solid var(--hair); border-bottom-left-radius: calc(var(--u) * 0.9); }
+  .dots { position: absolute; left: calc(var(--u) * 2.8); top: 50%; display: flex; gap: calc(var(--u) * 0.9); margin-top: calc(var(--u) * -0.6); }
+  .dots i { width: calc(var(--u) * 1.2); height: calc(var(--u) * 1.2); border-radius: 50%; background: var(--muted); }
+  .composer { display: flex; align-items: flex-end; gap: calc(var(--u) * 2); padding: calc(var(--u) * 2) calc(var(--u) * 2) calc(var(--u) * 2) calc(var(--u) * 3); border: 1px solid rgba(244, 247, 252, 0.16); border-radius: calc(var(--u) * 4); background: rgba(244, 247, 252, 0.04); }
+  .composer .text { position: relative; flex: 1; min-height: 2.7em; font-size: calc(var(--u) * 4); line-height: 1.35; letter-spacing: -0.01em; font-weight: 400; }
+  .composer .ph { position: absolute; left: 0; top: 0; color: var(--muted); }
+  .send { display: grid; place-items: center; width: calc(var(--u) * 7.4); height: calc(var(--u) * 7.4); border-radius: 50%; background: var(--paper); color: var(--night); font-size: calc(var(--u) * 3.6); }
+  .send .i { stroke-width: 2.4; }
+
+  /* 7 */
+  .end { display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .lockup { display: flex; align-items: center; gap: calc(var(--u) * 2.4); }
+  .mark { transform-origin: 50% 50%; width: calc(var(--u) * 13); height: calc(var(--u) * 13); overflow: visible; }
+  .word { font-size: calc(var(--u) * 10); font-weight: 600; letter-spacing: -0.02em; line-height: 1; white-space: nowrap; }
+  .word .c { display: inline-block; }
+  .word .d { color: #8a8d93; }
+  .end .two { margin-top: calc(var(--u) * 8); }
+  .contact { margin-top: calc(var(--u) * 6); display: flex; flex-wrap: wrap; justify-content: center; gap: calc(var(--u) * 2) calc(var(--u) * 4.4); font-size: calc(var(--u) * 3.6); font-weight: 400; color: #b2b5ba; }
+  .contact li { display: flex; align-items: center; gap: calc(var(--u) * 1.2); }
+  .contact .i { color: #8a8d93; }
+  .v .contact { flex-direction: column; align-items: center; }
+</style>
+</head>
+<body>
+
+<div id="stage">
+  <canvas id="contours"></canvas>
+  <div id="aurora"><i class="pool" id="pool-v"></i><i class="pool" id="pool-c"></i></div>
+  <i class="pool" id="scrim"></i>
+
+  <div id="world">
+    <!-- 1 · the hook -->
+    <section class="scene" id="s1">
+      <div class="col">
+        <h1 class="two">
+          <span class="dim" style="--fs: 7.4" data-words>Before they call you,</span>
+          <span class="lit" style="--fs: 12.5" data-fit><span class="w">they</span> <span class="w" id="google">google<i class="underline" id="underline"></i></span> <span class="w">you.</span></span>
+        </h1>
+      </div>
+    </section>
+
+    <!-- 2 + 3 · a search that opens on a client's site, then the work -->
+    <section class="scene" id="s2">
+      <div class="col">
+        <div class="slot" id="slot">
+          <div class="plane" id="plane"></div>
+          <div class="morph glass" id="morph">
+            <div class="search" id="search"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><span><span id="query"></span><i class="caret" id="caret"></i></span></div>
+            <img src="../../src/assets/mc-fiduciaire/home.webp" alt="" id="mcf">
+          </div>
+          <div class="caption" id="cap-mcf">
+            <h3>MC Fiduciaire <span class="domain">mc-fiduciaire.be <svg class="i" viewBox="0 0 24 24"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span></h3>
+            <p>Accounting firm · 500+ clients</p>
+          </div>
+          <div class="caption" id="cap-egma">
+            <h3>EGMA Construction <span class="domain">egmaconstruction.be <svg class="i" viewBox="0 0 24 24"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span></h3>
+            <p>Renovation contractor · Booischot</p>
+          </div>
+          <div class="over">
+            <h2 class="two" id="proof"><span class="lit" style="--fs: 12.5">Proof,</span><span class="dim" style="--fs: 12.5" data-fit>not promises.</span></h2>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4 · what the site does: their language, clear, clients -->
+    <section class="scene" id="s4a">
+      <div class="col">
+        <h2 class="two">
+          <span class="dim" style="--fs: 7.4">In their</span>
+          <span class="lit reel" style="--fs: 12.5" id="reel"><span lang="en">language.</span><span lang="ro">limbă.</span><span lang="fr">langue.</span><span lang="nl">taal.</span><span lang="pt">língua.</span><span lang="ru">язык.</span><span lang="uk">мова.</span></span>
+        </h2>
+        <p class="langs" id="langs"><span lang="ro">Română</span> <i>·</i> <span lang="fr">Français</span> <i>·</i> <span lang="en">English</span> <i>·</i> <span lang="nl">Nederlands</span> <i>·</i> <span lang="pt">Português</span> <i>·</i> <span lang="ru">Русский</span> <i>·</i> <span lang="uk">Українська</span></p>
+      </div>
+    </section>
+
+    <section class="scene" id="s4b">
+      <div class="col">
+        <h2 class="lit two" style="--fs: 24" id="clear">Clear.</h2>
+        <p class="sub" id="clear-sub">Nothing to figure out.</p>
+      </div>
+    </section>
+
+    <section class="scene" id="s4c">
+      <div class="col">
+        <h2 class="two">
+          <span class="dim" style="--fs: 7.4">Made to bring</span>
+          <span class="lit" style="--fs: 12.5">in clients.</span>
+        </h2>
+        <div class="toasts">
+          <div class="toast" id="toast-1">
+            <span class="chip"><svg class="i" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></span>
+            <div><b>New message</b><span>“Can you give me a quote?”</span></div><time>now</time>
+          </div>
+          <div class="toast" id="toast-2">
+            <span class="chip"><svg class="i" viewBox="0 0 24 24"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="m9 16 2 2 4-4"/></svg></span>
+            <div><b>Meeting booked</b><span>Thursday, 10:00</span></div><time>now</time>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5 · the do-it-yourself plan, and how it ends -->
+    <section class="scene" id="s5">
+      <div class="col">
+        <h2 class="two" id="diy-title">
+          <span class="dim" style="--fs: 7.4" data-words>Doing it</span>
+          <span class="lit" style="--fs: 12.5" data-words>yourself?</span>
+        </h2>
+        <div class="diy">
+          <ul class="tasks" id="tasks">
+            <li>Pick a template</li>
+            <li>Write every page</li>
+            <li>Translate it all</li>
+            <li>Make it work on phones</li>
+            <li>Get found on Google</li>
+            <li>Keep it up to date</li>
+          </ul>
+          <div class="weekends" id="weekends"><b id="weekend-count">1</b><span>weekends gone</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6 · one message instead -->
+    <section class="scene" id="s6">
+      <div class="col">
+        <h2 class="two" id="msg-title" style="transform-origin: left bottom">
+          <span class="dim" style="--fs: 7.4">Or send us</span>
+          <span class="lit" style="--fs: 14" data-fit id="one-message">one message.</span>
+        </h2>
+        <div class="chat" id="chat">
+          <div class="bubble sent" id="sent">Hi! I’m interested in a website for my business.</div>
+          <div class="reply" id="reply">
+            <div class="who"><svg viewBox="0 0 48 48" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M15.4 41L24 19.5L32.6 41M20.8 41L24 33L27.2 41" stroke="url(#adg)" stroke-width="3"/><path d="M10 41L24 6L38 41" stroke="#F4F7FC" stroke-width="4"/></svg>andu design</div>
+            <div class="bubble got" id="got"><span class="dots" id="dots"><i></i><i></i><i></i></span><span id="reply-text">Great! Tell us about your business.</span></div>
+          </div>
+          <div class="composer" id="composer">
+            <div class="text"><span class="ph" id="ph">Message</span><span id="typed"></span><i class="caret" id="caret-2"></i></div>
+            <span class="send" id="send"><svg class="i" viewBox="0 0 24 24"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7 · the mark draws itself, then the close from the site and the poster -->
+    <section class="scene" id="s7">
+      <div class="col end">
+        <div class="lockup" id="lockup">
+          <!-- the andu mark (brand/logo): the A as a summit ringed by contour lines -->
+          <svg class="mark" id="mark" viewBox="0 0 48 48" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <defs><linearGradient id="adg" x1="12" y1="0" x2="36" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#7C3AED"/><stop offset="1" stop-color="#22D3EE"/></linearGradient></defs>
+            <path id="ring-1" d="M15.4 41L24 19.5L32.6 41" stroke="url(#adg)" stroke-width="2"/>
+            <path id="ring-2" d="M20.8 41L24 33L27.2 41" stroke="url(#adg)" stroke-width="2"/>
+            <path id="peak" d="M10 41L24 6L38 41" stroke="#F4F7FC" stroke-width="3"/>
+          </svg>
+          <span class="word" id="word"><span class="c">a</span><span class="c">n</span><span class="c">d</span><span class="c">u</span><span class="c d" style="margin-left: 0.28em">d</span><span class="c d">e</span><span class="c d">s</span><span class="c d">i</span><span class="c d">g</span><span class="c d">n</span></span>
+        </div>
+        <h2 class="two" id="cta"><span class="lit" style="--fs: 11">Let’s build</span><span class="dim" style="--fs: 11">your website.</span></h2>
+        <ul class="contact" id="contact">
+          <li><svg class="i" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>WhatsApp +40 725 791 791</li>
+          <li><svg class="i" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>+32 465 26 10 35</li>
+          <li><svg class="i" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>bucatariualexandru11@gmail.com</li>
+        </ul>
+      </div>
+    </section>
+  </div>
+
+  <canvas id="fx"></canvas>
+</div>
+
+<script>
+const params = new URLSearchParams(location.search)
+const RENDER = params.has('render')
+const FORMAT = params.get('format') ?? (innerWidth >= innerHeight ? '16x9' : '9x16')
+const [W, H] = FORMAT === '16x9' ? [1920, 1080] : [1080, 1920]
+const V = H > W
+const U = Math.min(W, H) / 100 // 1% of the short side: 10.8 px in both shapes, so type is the same size in each
+const DUR = 31
+// the column: the site's 1120 px shell on a laptop; on a phone, a wider right margin keeps clear of TikTok's buttons
+const LEFT = V ? 8 * U : (W - 1120) / 2
+const COL = V ? W - 20 * U : 1120
+const PERSPECTIVE = 180 * U
+// the client screenshots (16:10): the column's width, but no taller than 58% of a laptop screen
+const SLOT_W = V ? COL : Math.min(COL, H * 0.58 * 1.6)
+const SLOT_H = SLOT_W / 1.6
+
+const $ = id => document.getElementById(id)
+const stage = $('stage')
+stage.style.width = `${W}px`
+stage.style.height = `${H}px`
+stage.style.setProperty('--u', `${U}px`)
+stage.style.setProperty('--left', `${LEFT}px`)
+stage.style.setProperty('--col', `${COL}px`)
+stage.style.setProperty('--slot-w', `${SLOT_W}px`)
+stage.style.setProperty('--slot-h', `${SLOT_H}px`)
+stage.classList.toggle('v', V)
+
+// ---------- time helpers: everything below is a function of t alone
+
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x))
+const lerp = (a, b, p) => a + (b - a) * p
+// a CSS cubic-bezier, solved by bisection (plenty precise for 30 fps)
+function bezier(x1, y1, x2, y2) {
+  const at = (a, b, s) => ((1 + 3 * a - 3 * b) * s * s + (3 * b - 6 * a) * s + 3 * a) * s
+  return x => {
+    if (x <= 0 || x >= 1) return clamp(x)
+    let lo = 0, hi = 1, s = x
+    for (let i = 0; i < 22; i++, s = (lo + hi) / 2) at(x1, x2, s) > x ? (hi = s) : (lo = s)
+    return at(y1, y2, s)
+  }
+}
+const ease = {
+  brand: bezier(0.22, 1, 0.36, 1), // the site's --ease-out
+  linear: x => x,
+  out: x => 1 - (1 - x) ** 3,
+  in: x => x ** 3,
+  inOut: x => (x < 0.5 ? 4 * x ** 3 : 1 - (-2 * x + 2) ** 3 / 2),
+  expo: x => (x >= 1 ? 1 : 1 - 2 ** (-10 * x)),
+  back: x => 1 + 2.4 * (x - 1) ** 3 + 1.4 * (x - 1) ** 2,
+}
+const prog = (t, a, b, e = ease.linear) => e(clamp((t - a) / (b - a)))
+// the value at t through keyframes [time, value, ease into it]; it holds before the first and after the last
+function kf(t, ...keys) {
+  if (t <= keys[0][0]) return keys[0][1]
+  for (let i = 1; i < keys.length; i++) {
+    const [t1, v1, e = ease.brand] = keys[i]
+    if (t < t1) {
+      const [t0, v0] = keys[i - 1]
+      return v0 + (v1 - v0) * e((t - t0) / (t1 - t0))
+    }
+  }
+  return keys[keys.length - 1][1]
+}
+// seeded, so every render jitters the same way
+function random(seed) {
+  return () => {
+    seed = (seed + 0x6d2b79f5) | 0
+    let r = Math.imul(seed ^ (seed >>> 15), 1 | seed)
+    r = (r + Math.imul(r ^ (r >>> 7), 61 | r)) ^ r
+    return ((r ^ (r >>> 14)) >>> 0) / 4294967296
+  }
+}
+
+// motion presets, each a set of offsets; mix() adds positions and multiplies scale and opacity
+const rise = (t, t0, d = 0.7, dist = 2.4) => {
+  const p = prog(t, t0, t0 + d, ease.brand)
+  return { y: (1 - p) * dist * U, o: prog(t, t0, t0 + d * 0.5), blur: (1 - p) * 5 }
+}
+const slam = (t, t0, d = 0.4, from = 1.5) => {
+  const p = prog(t, t0, t0 + d, ease.expo)
+  return { s: lerp(from, 1, p), o: prog(t, t0, t0 + 0.08), blur: (1 - p) * 16 }
+}
+const through = (t, t0, d = 0.4) => {
+  const p = prog(t, t0, t0 + d, ease.in)
+  return { s: 1 + p * 0.35, o: 1 - p, blur: p * 18 }
+}
+const fadeOut = (t, t0, d = 0.3, dist = -2) => {
+  const p = prog(t, t0, t0 + d, ease.in)
+  return { y: p * dist * U, o: 1 - p, blur: p * 8 }
+}
+function mix(...parts) {
+  const r = { x: 0, y: 0, z: 0, rx: 0, ry: 0, rz: 0, s: 1, o: 1, blur: 0 }
+  for (const p of parts)
+    for (const k in p) {
+      if (k === 's' || k === 'o') r[k] *= p[k]
+      else if (k === 'g') r.g = p.g
+      else r[k] += p[k]
+    }
+  return r
+}
+function put(el, p) {
+  const { x = 0, y = 0, z = 0, rx = 0, ry = 0, rz = 0, s = 1, o = 1, blur = 0, g } = p
+  const deep = z || rx || ry
+  el.style.transform =
+    (deep ? `perspective(${PERSPECTIVE}px) translate3d(${x}px, ${y}px, ${z}px) rotateX(${rx}deg) rotateY(${ry}deg)` : `translate(${x}px, ${y}px)`) +
+    (rz ? ` rotate(${rz}deg)` : '') +
+    (s !== 1 ? ` scale(${s})` : '')
+  el.style.opacity = clamp(o)
+  el.style.filter = blur > 0.15 ? `blur(${blur}px)` : 'none'
+  if (g !== undefined) el.style.setProperty('--g', g.toFixed(3))
+}
+
+// typing with a steady hand and a little jitter
+function typing(text, t0, perSecond, seed) {
+  const rnd = random(seed)
+  const times = []
+  for (let i = 0, at = t0; i < text.length; i++) {
+    times.push(at)
+    at += (0.65 + 0.7 * rnd()) / perSecond
+  }
+  return { text, times, end: times[times.length - 1] }
+}
+const typed = (line, t) => line.text.slice(0, line.times.filter(at => t >= at).length)
+const blink = (t, t0) => (Math.floor((t - t0) * 2.2) % 2 ? 0 : 1)
+
+// beats: each shakes the camera a little and brightens the contour lines
+const HITS = [[1.08, 1], [4.42, 0.45], [9.45, 0.8], [11.66, 0.55], [13.95, 0.55], [19.14, 1.2], [26.78, 0.7]]
+function shake(t) {
+  let x = 0, y = 0
+  for (const [at, k] of HITS) {
+    const d = t - at
+    if (d < 0 || d > 0.6) continue
+    const a = k * U * 0.5 * Math.exp(-d * 9)
+    x += a * Math.sin(d * 70)
+    y += a * Math.cos(d * 52)
+  }
+  return { x, y }
+}
+const pulse = t => HITS.reduce((sum, [at, k]) => (t < at ? sum : sum + k * Math.exp(-(t - at) * 4) * Math.min(1, (t - at) / 0.04)), 0)
+
+// ---------- the contour lines: the hero's shader (src/v2/Topography.jsx), driven by the timeline instead of the clock
+
+const FRAG = `#version 300 es
+precision highp float;
+uniform vec2 iResolution;
+uniform float iTime;
+uniform float uMorphAmount;
+uniform float uBands;
+uniform float uThickness;
+uniform float uScale;
+uniform float uGlow;
+uniform float uContrast;
+uniform float uOpacity;
+uniform float uGrainIntensity;
+uniform vec3 uLow;
+uniform vec3 uMid;
+uniform vec3 uHigh;
+uniform vec4 uCtrlA;
+uniform vec4 uCtrlB;
+uniform vec4 uCtrlC;
+uniform vec4 uCtrlD;
+out vec4 fragColor;
+
+float bez(float t, vec4 c) {
+  float w = 6.2831853 * t;
+  return 0.5 * (c.x * sin(w) + c.y * cos(w) + c.z * sin(2.0 * w) + c.w * cos(2.0 * w));
+}
+float field(vec2 uv) {
+  vec2 a = vec2(bez(uv.x, uCtrlA), bez(uv.x, uCtrlB));
+  vec2 b = vec2(bez(uv.y, uCtrlC), bez(uv.y, uCtrlD));
+  return distance(a, b);
+}
+vec3 elevationColor(float e) {
+  vec3 c = mix(uLow, uMid, smoothstep(0.0, 0.5, e));
+  return mix(c, uHigh, smoothstep(0.5, 1.0, e));
+}
+void main() {
+  vec2 uv = gl_FragCoord.xy / iResolution.xy;
+  vec2 suv = (uv - 0.5) / max(uScale, 0.001) + 0.5;
+  float fv = field(suv);
+  float f = fv * uBands;
+  float frac = fract(f);
+  float lineDist = min(frac, 1.0 - frac);
+  float aa = fwidth(f) + 0.0001;
+  float mask = 1.0 - smoothstep(uThickness - aa, uThickness + aa, lineDist);
+  float glowR = uThickness + uGlow * 0.5 + aa;
+  float glow = (1.0 - smoothstep(uThickness, glowR, lineDist)) * step(0.0001, uGlow);
+  float elev = clamp(fv / (uMorphAmount * 2.5 + 0.001), 0.0, 1.0);
+  vec3 lineCol = elevationColor(elev);
+  float coverage = clamp(mask + glow * 0.55, 0.0, 1.0);
+  coverage = pow(coverage, max(uContrast, 0.001));
+  float g = fract(sin(dot(gl_FragCoord.xy, vec2(12.9898, 78.233)) + iTime) * 43758.5453);
+  float a = clamp(coverage + (g - 0.5) * uGrainIntensity, 0.0, 1.0) * uOpacity;
+  fragColor = vec4(clamp(lineCol, 0.0, 1.0) * a, a);
+}`
+
+function contourLines(canvas) {
+  canvas.width = W
+  canvas.height = H
+  const gl = canvas.getContext('webgl2', { premultipliedAlpha: true, preserveDrawingBuffer: true, antialias: false })
+  if (!gl) return () => {} // no WebGL: the video simply has no lines
+  const shader = (type, src) => {
+    const s = gl.createShader(type)
+    gl.shaderSource(s, src)
+    gl.compileShader(s)
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s))
+    return s
+  }
+  const program = gl.createProgram()
+  gl.attachShader(program, shader(gl.VERTEX_SHADER, '#version 300 es\nin vec2 position;\nvoid main() { gl_Position = vec4(position, 0.0, 1.0); }'))
+  gl.attachShader(program, shader(gl.FRAGMENT_SHADER, FRAG))
+  gl.linkProgram(program)
+  gl.useProgram(program)
+  gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer())
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW)
+  const position = gl.getAttribLocation(program, 'position')
+  gl.enableVertexAttribArray(position)
+  gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0)
+  const u = name => gl.getUniformLocation(program, name)
+  // the hero's settings (src/v2/App.jsx over Topography's defaults); grain a touch lower, since video compression smears it
+  gl.uniform2f(u('iResolution'), W, H)
+  gl.uniform1f(u('uMorphAmount'), 3)
+  gl.uniform1f(u('uBands'), 2)
+  gl.uniform1f(u('uThickness'), 0.01)
+  gl.uniform1f(u('uScale'), 2)
+  gl.uniform1f(u('uGlow'), 0.3)
+  gl.uniform1f(u('uContrast'), 3)
+  gl.uniform1f(u('uGrainIntensity'), 0.04)
+  gl.uniform3f(u('uLow'), 124 / 255, 58 / 255, 237 / 255)
+  gl.uniform3f(u('uMid'), 34 / 255, 211 / 255, 238 / 255)
+  gl.uniform3f(u('uHigh'), 1, 1, 1)
+  const ctrl = ['uCtrlA', 'uCtrlB', 'uCtrlC', 'uCtrlD'].map(u)
+  const CTRL_INDICES = [[1, -2, 3, -4], [9, -8, 7, -6], [5, 2, 5, -5], [-1, -3, 8, 9]]
+  const time = u('iTime'), opacity = u('uOpacity')
+  return (t, a) => {
+    gl.uniform1f(time, t)
+    gl.uniform1f(opacity, a)
+    CTRL_INDICES.forEach((idx, g) => gl.uniform4fv(ctrl[g], idx.map(i => 3 * Math.sin(t * 0.35 * Math.sin(i * 0.05) + i))))
+    gl.viewport(0, 0, W, H)
+    gl.clearColor(0, 0, 0, 0)
+    gl.clear(gl.COLOR_BUFFER_BIT)
+    gl.drawArrays(gl.TRIANGLES, 0, 3)
+  }
+}
+const drawContours = contourLines($('contours'))
+// the lines drift a little faster than on the site and surge through each scene change
+const SURGES = [2.8, 10.4, 15.5, 18.2, 25.4]
+const contourTime = t => 14 + t * 0.9 + SURGES.reduce((sum, at) => sum + 1.4 * prog(t, at, at + 0.9, ease.inOut), 0)
+
+// ---------- the comet: a point of light that leads the eye from scene to scene, drawn on #fx
+
+const fxCanvas = $('fx')
+fxCanvas.width = W
+fxCanvas.height = H
+const fx = fxCanvas.getContext('2d')
+let legs = [] // { t0, t1, e, at: p => [x, y] }, set in layout()
+let cometAlpha = () => 0
+let bursts = []
+function cometAt(t) {
+  let prev = legs[0]
+  for (const leg of legs) {
+    if (t < leg.t0) return prev === leg ? leg.at(0) : prev.at(1)
+    if (t <= leg.t1) return leg.at(leg.e(clamp((t - leg.t0) / (leg.t1 - leg.t0))))
+    prev = leg
+  }
+  return prev.at(1)
+}
+const line = (a, b) => p => [lerp(a[0], b[0], p), lerp(a[1], b[1], p)]
+const curve = (a, c1, c2, b) => p => {
+  const q = 1 - p
+  return [0, 1].map(i => q * q * q * a[i] + 3 * q * q * p * c1[i] + 3 * q * p * p * c2[i] + p * p * p * b[i])
+}
+
+function drawFx(t) {
+  fx.clearRect(0, 0, W, H)
+  const a = cometAlpha(t)
+  if (a > 0.01) {
+    // the trail: one tapering ribbon through where the comet was over the last 0.28 s
+    const pts = []
+    for (let i = 0; i <= 36; i++) pts.push(cometAt(t - i * 0.008))
+    const head = pts[0], tail = pts[pts.length - 1]
+    const left = [], right = []
+    pts.forEach(([x, y], i) => {
+      const [px, py] = pts[Math.max(0, i - 1)], [nx, ny] = pts[Math.min(pts.length - 1, i + 1)]
+      const len = Math.hypot(nx - px, ny - py) || 1
+      const w = 0.75 * U * (1 - i / (pts.length - 1)) ** 1.1
+      left.push([x - ((ny - py) / len) * w, y + ((nx - px) / len) * w])
+      right.push([x + ((ny - py) / len) * w, y - ((nx - px) / len) * w])
+    })
+    fx.globalCompositeOperation = 'lighter'
+    const grad = fx.createLinearGradient(head[0], head[1], tail[0], tail[1])
+    grad.addColorStop(0, `rgba(190, 242, 255, ${0.95 * a})`)
+    grad.addColorStop(0.35, `rgba(34, 211, 238, ${0.55 * a})`)
+    grad.addColorStop(1, 'rgba(124, 58, 237, 0)')
+    fx.fillStyle = grad
+    for (const blur of [2.2 * U, 0]) {
+      fx.filter = blur ? `blur(${blur}px)` : 'none'
+      fx.beginPath()
+      left.forEach(([x, y], i) => (i ? fx.lineTo(x, y) : fx.moveTo(x, y)))
+      for (let i = right.length - 1; i >= 0; i--) fx.lineTo(right[i][0], right[i][1])
+      fx.fill()
+    }
+    fx.filter = 'none'
+    const [x, y] = head
+    const halo = fx.createRadialGradient(x, y, 0, x, y, 6 * U)
+    halo.addColorStop(0, `rgba(255, 255, 255, ${a})`)
+    halo.addColorStop(0.1, `rgba(200, 245, 255, ${0.85 * a})`)
+    halo.addColorStop(0.3, `rgba(34, 211, 238, ${0.28 * a})`)
+    halo.addColorStop(0.65, `rgba(124, 58, 237, ${0.1 * a})`)
+    halo.addColorStop(1, 'rgba(124, 58, 237, 0)')
+    fx.fillStyle = halo
+    fx.beginPath()
+    fx.arc(x, y, 6 * U, 0, 7)
+    fx.fill()
+  }
+  // sparks thrown off a landing word
+  fx.globalCompositeOperation = 'lighter'
+  fx.lineCap = 'round'
+  for (const b of bursts) {
+    const d = t - b.t
+    if (d < 0 || d > 0.9) continue
+    const rnd = random(b.seed)
+    for (let i = 0; i < b.n; i++) {
+      const angle = rnd() * Math.PI * 2, speed = (0.5 + rnd()) * b.speed, life = 0.45 + rnd() * 0.4, hue = rnd()
+      if (d > life) continue
+      const p = d / life, travel = speed * (1 - (1 - p) ** 2) * life * 0.8
+      const cx = b.x + Math.cos(angle) * (b.rx + travel), cy = b.y + Math.sin(angle) * (b.ry + travel)
+      const len = (1 - p) * 2.6 * U
+      fx.strokeStyle = hue < 0.4 ? `rgba(244, 247, 252, ${(1 - p) ** 1.5})` : hue < 0.75 ? `rgba(34, 211, 238, ${(1 - p) ** 1.5})` : `rgba(160, 120, 255, ${(1 - p) ** 1.5})`
+      fx.lineWidth = 0.35 * U * (1 - p) + 1
+      fx.beginPath()
+      fx.moveTo(cx, cy)
+      fx.lineTo(cx - Math.cos(angle) * len, cy - Math.sin(angle) * len)
+      fx.stroke()
+    }
+  }
+  fx.globalCompositeOperation = 'source-over'
+}
+
+// ---------- layout: fit the big lines, split words, measure where the comet goes
+
+let k = 1 // the stage's scale in the window (1 when rendering)
+function box(el) {
+  const r = el.getBoundingClientRect(), s = stage.getBoundingClientRect()
+  return { x: (r.left - s.left) / k, y: (r.top - s.top) / k, w: r.width / k, h: r.height / k, cx: (r.left + r.width / 2 - s.left) / k, cy: (r.top + r.height / 2 - s.top) / k }
+}
+
+const SHOTS = {
+  'mcf-home': '../../src/assets/mc-fiduciaire/home.webp',
+  'mcf-team': '../../src/assets/mc-fiduciaire/team.webp',
+  'mcf-info': '../../src/assets/mc-fiduciaire/info.webp',
+  'mcf-contact': '../../src/assets/mc-fiduciaire/contact.webp',
+  'egma-home': '../../src/assets/egma-construction/home.webp',
+  'egma-paving': '../../src/assets/egma-construction/paving.webp',
+  'egma-photo': '../../src/assets/egma-construction/photo-viewer.webp',
+}
+// the wall of work in scene 3: EGMA's homepage in the middle, where the swipe brings it in
+const WALL = [
+  ['mcf-info', -1, -1], ['egma-paving', 0, -1], ['mcf-team', 1, -1],
+  ['egma-photo', -1, 0], ['egma-home', 0, 0], ['mcf-home', 1, 0],
+  ['mcf-contact', -1, 1], ['egma-paving', 0, 1, 'flip'], ['mcf-team', 1, 1, 'flip'],
+]
+const GAP = 5 * U
+const plane = $('plane')
+plane.style.left = `${-SLOT_W - GAP}px`
+plane.style.top = `${-SLOT_H - GAP}px`
+plane.style.width = `${3 * SLOT_W + 2 * GAP}px`
+plane.style.height = `${3 * SLOT_H + 2 * GAP}px`
+const cells = WALL.map(([shot, c, r]) => {
+  const img = new Image()
+  img.src = SHOTS[shot]
+  img.alt = ''
+  img.className = 'glass'
+  img.style.cssText = `left: ${(c + 1) * (SLOT_W + GAP)}px; top: ${(r + 1) * (SLOT_H + GAP)}px; width: ${SLOT_W}px; height: ${SLOT_H}px`
+  plane.append(img)
+  return { img, ring: Math.max(Math.abs(c), Math.abs(r)), c, r }
+})
+
+for (const el of document.querySelectorAll('[data-words]')) el.innerHTML = el.textContent.split(' ').map(w => `<span class="w">${w}</span>`).join(' ')
+
+const QUERY = typing('mc fiduciaire', 3.5, 17, 7)
+const MESSAGE = typing('Hi! I’m interested in a website for my business.', 20.95, 25, 11)
+const TASK_TIMES = [16.1, 16.42, 16.74, 17.06, 17.38, 17.7]
+const LANGS = ['en', 'ro', 'fr', 'nl', 'pt', 'ru', 'uk']
+const REEL_AT = [11.64, 10.7, 10.86, 11.02, 11.18, 11.34, 11.5] // when each word arrives; English lands last
+let m = {} // measurements
+
+function layout() {
+  // the big lines shrink to fit the column (the phone's is narrower)
+  for (const el of document.querySelectorAll('[data-fit]')) {
+    el.style.width = 'max-content'
+    const w = el.getBoundingClientRect().width / k
+    el.style.width = ''
+    if (w > COL) el.style.fontSize = `${(parseFloat(getComputedStyle(el).fontSize) * COL) / w}px`
+  }
+
+  const morph = $('morph')
+  morph.style.width = `${SLOT_W}px`
+  morph.style.height = `${10 * U}px`
+  morph.style.top = `${(SLOT_H - 10 * U) / 2}px`
+  const google = box($('google')), query = box($('query')), one = box($('one-message')), got = box($('got'))
+  const title = box($('msg-title')), area = box($('s6')), sent = box($('sent')), composer = box($('composer')), mark = box($('mark'))
+  m = { got }
+  m.titleDy = area.y + area.h / 2 - title.cy // centre the title while the chat isn't there yet
+  m.sentDy = composer.y - sent.y
+  // scene 7 opens on the mark alone, big and centred, then it settles into the lockup
+  m.markScale = (V ? 36 : 40) * U / mark.h
+  m.markDx = W / 2 - mark.cx
+  m.markDy = box($('s7')).y + box($('s7')).h * 0.47 - mark.cy
+
+  // where the comet flies
+  const ul = google.y + google.h + 0.1 * parseFloat(getComputedStyle($('google')).fontSize)
+  const caret = [query.x + 0.3 * U, query.cy]
+  const peak = $('peak')
+  const len = peak.getTotalLength()
+  const onMark = ({ x, y }) => {
+    const px = mark.x + (x / 48) * mark.w, py = mark.y + (y / 48) * mark.h
+    return [mark.cx + (px - mark.cx) * m.markScale + m.markDx, mark.cy + (py - mark.cy) * m.markScale + m.markDy]
+  }
+  const start = onMark(peak.getPointAtLength(0))
+  legs = [
+    { t0: 1.18, t1: 1.62, e: ease.out, at: curve([-6 * U, ul + 30 * U], [google.x - 30 * U, ul + 22 * U], [google.x - 12 * U, ul], [google.x, ul]) },
+    { t0: 1.62, t1: 2.1, e: ease.inOut, at: line([google.x, ul], [google.x + google.w, ul]) },
+    { t0: 2.1, t1: 3.12, e: ease.inOut, at: curve([google.x + google.w, ul], [google.x + google.w + 26 * U, ul - 4 * U], [caret[0] + 30 * U, caret[1] - 34 * U], caret) },
+    { t0: 25.35, t1: 26.0, e: ease.inOut, at: curve([got.cx, got.cy], [got.cx + 10 * U, got.cy - 30 * U], [start[0] - 30 * U, start[1] + 10 * U], start) },
+    { t0: 26.0, t1: 26.75, e: ease.inOut, at: p => onMark(peak.getPointAtLength(p * len)) },
+  ]
+  cometAlpha = t => kf(t, [1.18, 0], [1.3, 1], [3.05, 1], [3.25, 0], [25.3, 0], [25.45, 1], [26.75, 1], [27.15, 0])
+  bursts = [
+    { t: 19.14, x: one.cx, y: one.cy, rx: one.w * 0.5, ry: one.h * 0.4, n: 34, speed: 26 * U, seed: 3 },
+    { t: 26.78, x: onMark({ x: 38, y: 41 })[0], y: onMark({ x: 38, y: 41 })[1], rx: U, ry: U, n: 16, speed: 18 * U, seed: 5 },
+  ]
+  for (const id of ['peak', 'ring-1', 'ring-2']) {
+    const path = $(id), l = path.getTotalLength()
+    path.style.strokeDasharray = `${l} ${l}`
+    path.dataset.length = l
+  }
+}
+
+// ---------- the scenes: each sets every element it owns from t
+
+function scene1(t) {
+  const words = $('s1').querySelectorAll('.dim .w')
+  words.forEach((w, i) => put(w, rise(t, -0.1 + i * 0.12, 0.6, 2.2)))
+  $('s1').querySelectorAll('.lit .w').forEach((w, i) => put(w, mix(slam(t, 0.72 + i * 0.17), { g: kf(t, [1.0, 0], [1.12, 1, ease.out], [2.2, 0.3]) })))
+  $('underline').style.transform = `scaleX(${prog(t, 1.62, 2.1, ease.inOut)})`
+  put($('s1').querySelector('.col'), through(t, 2.78, 0.42))
+}
+
+function scene2(t) {
+  // a search pill opens where the comet lands, types, and grows into the site it found
+  const pill = 10 * U
+  const morph = $('morph')
+  const h = kf(t, [4.5, pill], [5.2, SLOT_H, ease.inOut])
+  morph.style.height = `${h}px`
+  morph.style.top = `${(SLOT_H - h) / 2}px`
+  morph.style.width = `${kf(t, [3.05, pill], [3.55, SLOT_W, ease.expo])}px`
+  morph.style.borderRadius = `${kf(t, [4.5, pill / 2], [5.2, 1.2 * U, ease.inOut])}px`
+  morph.style.setProperty('--edge', kf(t, [4.38, 0.14], [4.45, 0.55, ease.out], [4.9, 0.08]))
+  put(morph, mix(
+    { o: prog(t, 3.02, 3.18) },
+    { rx: kf(t, [4.5, 0], [5.15, 10, ease.inOut], [7.3, 3, ease.out]), ry: kf(t, [4.5, 0], [5.15, -12, ease.inOut], [7.3, 5, ease.inOut]), z: kf(t, [4.5, 0], [5.15, -10 * U, ease.inOut], [7.3, 0, ease.out]) },
+    { x: kf(t, [7.32, 0], [7.72, -SLOT_W - 30 * U, ease.in]), ry: kf(t, [7.32, 0], [7.72, 30, ease.in]), blur: kf(t, [7.32, 0], [7.72, 10, ease.in]), o: 1 - prog(t, 7.5, 7.72) },
+  ))
+  $('search').style.opacity = prog(t, 3.15, 3.35) * (1 - prog(t, 4.45, 4.58))
+  $('query').textContent = typed(QUERY, t)
+  $('caret').style.opacity = t < QUERY.times[0] || t > QUERY.end + 0.1 ? blink(t, 3.15) : 1
+  put($('mcf'), { o: prog(t, 4.52, 4.88), s: kf(t, [4.52, 1.1], [5.6, 1, ease.out], [7.4, 1.05, ease.linear]) })
+  put($('cap-mcf'), mix(rise(t, 5.3), fadeOut(t, 7.2, 0.25)))
+
+  // EGMA swipes in as the middle of a wall of work, then the camera tilts back to show the whole wall
+  const tilt = prog(t, 8.9, 9.75, ease.inOut)
+  const glide = prog(t, 9.2, 10.8, ease.out)
+  plane.style.transform =
+    `perspective(${PERSPECTIVE}px) translate3d(${kf(t, [7.42, SLOT_W + 30 * U], [7.95, 0, ease.expo])}px, ${lerp(0, 3 * U, tilt) - prog(t, 10.4, 10.8, ease.in) * 30 * U}px, 0)` +
+    ` rotateX(${lerp(kf(t, [7.42, 4], [8.9, 2]), 54, tilt)}deg) rotateY(${kf(t, [7.42, -30], [7.95, -6, ease.expo], [8.9, 3, ease.inOut]) * (1 - tilt)}deg)` +
+    ` rotateZ(${lerp(0, -28, tilt)}deg) translate(${lerp(0, 1, tilt) * lerp(10, -10, glide) * U}px, ${lerp(0, 1, tilt) * lerp(6, -6, glide) * U}px) scale(${lerp(1, 0.48, tilt)})`
+  plane.style.filter = t < 7.85 ? `blur(${kf(t, [7.42, 12], [7.85, 0])}px)` : 'none'
+  plane.style.opacity = prog(t, 7.42, 7.5) * (1 - prog(t, 10.45, 10.8))
+  const dim = kf(t, [9.3, 1], [9.7, 0.3])
+  for (const { img, ring } of cells) img.style.opacity = (ring ? prog(t, 8.95 + ring * 0.12, 9.45 + ring * 0.12) : 1) * dim
+  put($('cap-egma'), mix(rise(t, 7.75), fadeOut(t, 8.75, 0.25)))
+
+  const proof = $('proof').children
+  put(proof[0], mix(slam(t, 9.32), { g: kf(t, [9.35, 0], [9.45, 1, ease.out], [10.2, 0.3]) }))
+  put(proof[1], rise(t, 9.5, 0.6))
+  put($('proof'), through(t, 10.45, 0.35))
+}
+
+function scene4(t) {
+  // In their language: the word passes through each of the seven languages the MC Fiduciaire site speaks
+  const reel = $('reel').children
+  let now = 1
+  REEL_AT.forEach((at, i) => t >= at && at > REEL_AT[now] && (now = i))
+  for (let i = 0; i < reel.length; i++) {
+    const at = REEL_AT[i]
+    const next = i === 0 ? Infinity : i === 6 ? REEL_AT[0] : REEL_AT[i + 1]
+    const enter = i === 1 ? slam(t, at, 0.3) : { y: (1 - prog(t, at, at + 0.09, ease.out)) * 0.4 * 12.5 * U, o: prog(t, at, at + 0.06) }
+    const leave = i === 0 ? {} : { y: -prog(t, next, next + 0.07, ease.in) * 0.4 * 12.5 * U, o: 1 - prog(t, next, next + 0.06) }
+    put(reel[i], mix(enter, leave, i === 0 ? { s: kf(t, [REEL_AT[0], 1.14], [REEL_AT[0] + 0.3, 1, ease.expo]), g: kf(t, [11.62, 0], [11.7, 1, ease.out], [12.3, 0.3]) } : { g: 0.15 }))
+  }
+  const names = $('langs').querySelectorAll('span')
+  names.forEach(el => el.style.setProperty('--on', t >= REEL_AT[0] ? kf(t, [REEL_AT[0], 0.45], [REEL_AT[0] + 0.3, 1]) : el.lang === LANGS[now] ? 1 : 0.45))
+  const s4a = $('s4a').querySelector('.col')
+  put(s4a.firstElementChild.firstElementChild, rise(t, 10.56))
+  put($('langs'), rise(t, 10.9))
+  put(s4a, through(t, 12.3, 0.3))
+
+  // Clear: a focus pull
+  put($('clear'), { s: kf(t, [12.36, 1.18], [12.95, 1, ease.brand]), o: prog(t, 12.36, 12.55), blur: kf(t, [12.36, 36], [12.85, 0, ease.out], [13.58, 0], [13.82, 26, ease.in]), g: 0.25 })
+  put($('clear-sub'), mix(rise(t, 12.7), { o: 1 - prog(t, 13.58, 13.78) }))
+
+  // Made to bring in clients, and here they come
+  const s4c = $('s4c').querySelector('.col')
+  const [set, point] = s4c.querySelector('.two').children
+  put(set, rise(t, 13.66))
+  put(point, mix(slam(t, 13.8), { g: kf(t, [13.9, 0], [13.97, 1, ease.out], [14.7, 0.3]) }))
+  ;['toast-1', 'toast-2'].forEach((id, i) => {
+    const at = 14.25 + i * 0.42
+    put($(id), { y: kf(t, [at, -3 * U], [at + 0.45, 0, ease.back]), s: kf(t, [at, 0.94], [at + 0.45, 1, ease.back]), o: prog(t, at, at + 0.15) })
+  })
+  put(s4c, through(t, 15.48, 0.3))
+}
+
+function scene5(t) {
+  // the plan grows a step at a time while the weekends go, then it all falls down
+  const FALL = 18.15
+  const fall = (i, delay) => {
+    const d = t - FALL - delay
+    if (d <= 0) return {}
+    const rnd = random(21 + i)
+    const spin = (rnd() - 0.5) * 160, drift = (rnd() - 0.5) * 24 * U
+    return { y: -9 * U * d + 0.5 * 560 * U * d * d, x: drift * d, rz: spin * d, o: 1 - prog(d, 0.35, 0.7) }
+  }
+  const title = $('diy-title').querySelectorAll('.w')
+  put(title[0], mix(rise(t, 15.6), fall(0, 0.26)))
+  put(title[1], mix(rise(t, 15.6), fall(1, 0.3)))
+  put(title[2], mix(slam(t, 15.74), { g: kf(t, [15.8, 0], [15.9, 0.8, ease.out], [16.6, 0.2]) }, fall(2, 0.22)))
+  const tasks = $('tasks').children
+  for (let i = 0; i < tasks.length; i++) put(tasks[i], mix({ x: kf(t, [TASK_TIMES[i], -4 * U], [TASK_TIMES[i] + 0.4, 0, ease.expo]), o: prog(t, TASK_TIMES[i], TASK_TIMES[i] + 0.15) }, fall(i + 3, (tasks.length - i) * 0.035)))
+  const done = TASK_TIMES.filter(at => t >= at).length
+  $('weekend-count').textContent = Math.max(1, done)
+  const last = TASK_TIMES[Math.max(0, done - 1)]
+  put($('weekend-count'), { s: 1 + 0.22 * Math.exp(-(t - last) * 9) * (t >= last ? 1 : 0) })
+  put($('weekends'), mix(rise(t, 16.1), fall(9, 0.1)))
+}
+
+function scene6(t) {
+  // One message: big and centred, then it moves up for the conversation
+  const title = $('msg-title')
+  const up = prog(t, 20.35, 20.9, ease.inOut)
+  put(title, mix({ y: lerp(m.titleDy, 0, up), s: lerp(1, 0.62, up) }, through(t, 25.35, 0.4)))
+  const [set, point] = title.children
+  put(set, rise(t, 18.88))
+  put(point, mix(slam(t, 19.0, 0.42, 1.6), { g: kf(t, [19.09, 0], [19.16, 1.1, ease.out], [20.3, 0.35]) }))
+
+  put($('composer'), rise(t, 20.6))
+  const text = typed(MESSAGE, t)
+  const sending = t >= 23.02
+  $('typed').textContent = sending ? '' : text
+  $('ph').style.opacity = text && !sending ? 0 : 1
+  $('caret-2').style.opacity = (t < MESSAGE.times[0] || t > MESSAGE.end + 0.08 ? blink(t, 20.6) : 1) * (sending ? 0 : 1)
+  put($('send'), { s: kf(t, [22.96, 1], [23.04, 0.84, ease.out], [23.32, 1, ease.back]), o: text ? 1 : 0.35 })
+  put($('sent'), { y: kf(t, [23.03, m.sentDy * 0.7], [23.5, 0, ease.brand]), s: kf(t, [23.03, 0.9], [23.5, 1, ease.brand]), o: prog(t, 23.03, 23.13) })
+
+  put($('reply'), rise(t, 23.7, 0.6))
+  const answer = prog(t, 24.45, 24.8, ease.brand)
+  $('got').style.width = `${lerp(13 * U, m.got.w, answer)}px`
+  $('dots').style.opacity = 1 - prog(t, 24.4, 24.5)
+  $('dots').querySelectorAll('i').forEach((dot, i) => (dot.style.transform = `translateY(${-0.7 * U * Math.max(0, Math.sin(t * 9 - i * 0.8))}px)`))
+  $('reply-text').style.opacity = prog(t, 24.5, 24.8)
+  put($('chat'), through(t, 25.3, 0.4))
+}
+
+function scene7(t) {
+  // the comet draws the summit, the contour lines follow, then the mark settles into the lockup
+  const settle = prog(t, 27.0, 27.65, ease.inOut)
+  const mark = $('mark')
+  put(mark, { x: lerp(m.markDx, 0, settle), y: lerp(m.markDy, 0, settle), s: lerp(m.markScale, 1, settle) })
+  mark.style.filter = `drop-shadow(0 0 ${0.6 + 0.8 * Math.exp(-Math.max(0, t - 26.75) * 2)}px rgba(34, 211, 238, 0.9))`
+  const draw = (id, p) => ($(id).style.strokeDashoffset = $(id).dataset.length * (1 - p))
+  draw('peak', prog(t, 26.0, 26.75, ease.inOut))
+  draw('ring-1', prog(t, 26.45, 27.0, ease.inOut))
+  draw('ring-2', prog(t, 26.6, 27.1, ease.inOut))
+  $('word').querySelectorAll('.c').forEach((c, i) => put(c, rise(t, 27.3 + i * 0.035, 0.6, 3)))
+  const [lit, dim] = $('cta').children
+  put(lit, rise(t, 27.8))
+  put(dim, rise(t, 27.95))
+  $('contact').querySelectorAll('li').forEach((li, i) => put(li, rise(t, 28.35 + i * 0.12)))
+}
+
+const SCENES = [['s1', 0, 3.25], ['s2', 3.0, 10.85], ['s4a', 10.5, 12.65], ['s4b', 12.3, 13.85], ['s4c', 13.6, 15.8], ['s5', 15.55, 19.4], ['s6', 18.8, 25.8], ['s7', 25.6, DUR + 1]]
+const DRAWS = [[0, 3.25, scene1], [3.0, 10.85, scene2], [10.5, 15.8, scene4], [15.55, 19.4, scene5], [18.8, 25.8, scene6], [25.6, DUR + 1, scene7]]
+
+function seek(t) {
+  t = clamp(t, 0, DUR - 1e-6)
+  for (const [id, from, to] of SCENES) $(id).style.visibility = t >= from && t < to ? 'visible' : 'hidden'
+  for (const [from, to, draw] of DRAWS) if (t >= from && t < to) draw(t)
+  const { x, y } = shake(t)
+  $('world').style.transform = `translate(${x}px, ${y}px)`
+  // the hero's lines lead, hand over to the aurora for the middle, and come back for the close (as the site does)
+  drawContours(contourTime(t), clamp(kf(t, [0, 0.75], [2.9, 0.75], [3.5, 0.3], [18.5, 0.3], [19.2, 0.4], [25.6, 0.35], [26.4, 0.8]) + 0.3 * pulse(t)))
+  put($('scrim'), { x: LEFT + COL / 2, y: H * 0.43, o: kf(t, [0, 1], [2.9, 1], [3.4, 0.5], [25.6, 0.5], [26.6, 1]) })
+  $('aurora').style.opacity = kf(t, [0, 0.3], [3.2, 0.3], [4.2, 1])
+  put($('pool-v'), { x: W * 0.22 + Math.sin(t * 0.21) * 8 * U, y: H * 0.18 + Math.cos(t * 0.17) * 6 * U })
+  put($('pool-c'), { x: W * 0.78 + Math.cos(t * 0.19) * 8 * U, y: H * 0.42 + Math.sin(t * 0.23) * 7 * U })
+  drawFx(t)
+}
+
+// ---------- start: wait for the fonts (all three alphabets) and the screenshots, then measure
+
+function fit() {
+  k = RENDER ? 1 : Math.min(innerWidth / W, innerHeight / H)
+  stage.style.transform = `translate(${(innerWidth - W * k) / 2}px, ${(innerHeight - H * k) / 2}px) scale(${k})`
+}
+fit()
+
+const START = clamp(parseFloat(params.get('t') ?? '0') || 0, 0, DUR)
+const ready = (async () => {
+  await Promise.all(['400', '500', '600'].map(weight => document.fonts.load(`${weight} 100px "Geist Variable"`, 'Aa ăî Русский Українська язык мова')))
+  await document.fonts.ready
+  await Promise.all([...document.images].map(img => img.decode().catch(() => {})))
+  layout()
+  seek(START)
+})()
+window.promo = { duration: DUR, ready, seek }
+
+if (!RENDER) {
+  let clock = START, playing = !params.has('t'), last, idle
+  ready.then(() => {
+    const tick = now => {
+      if (playing && last !== undefined) clock = (clock + (now - last) / 1000) % DUR
+      last = now
+      seek(clock)
+      requestAnimationFrame(tick)
+    }
+    requestAnimationFrame(tick)
+  })
+  addEventListener('resize', fit)
+  addEventListener('keydown', e => {
+    if (e.key === ' ') playing = !playing
+    else if (e.key === 'r' || e.key === 'R' || e.key === 'Home') (clock = 0), (playing = true)
+    else if (e.key === 'ArrowRight') clock = Math.min(DUR - 0.01, clock + 1)
+    else if (e.key === 'ArrowLeft') clock = Math.max(0, clock - 1)
+    else if (e.key === 'f' || e.key === 'F') document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen()
+    else return
+    e.preventDefault()
+  })
+  // a clean screen to record: the cursor hides when it stops moving
+  addEventListener('mousemove', () => {
+    document.body.style.cursor = ''
+    clearTimeout(idle)
+    idle = setTimeout(() => (document.body.style.cursor = 'none'), 1500)
+  })
+}
+</script>
+</body>
+</html>
