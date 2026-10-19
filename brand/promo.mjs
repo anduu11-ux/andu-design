@@ -3,7 +3,7 @@
 //
 // The page draws every frame itself from a time (promo.seek), so we step through the timeline, screenshot each frame
 // and pipe it into ffmpeg: the video is frame-exact however slow the machine is, and nothing plays in real time.
-import { spawn } from 'node:child_process'
+import { execFileSync, spawn } from 'node:child_process'
 import { mkdirSync, mkdtempSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
@@ -16,6 +16,25 @@ const FPS = 30
 // 9x16 is for TikTok, Reels and Shorts; 16x9 is for playing full screen on a laptop (or YouTube)
 const SIZES = { '9x16': [1080, 1920], '16x9': [1920, 1080] }
 const formats = process.argv.length > 2 ? process.argv.slice(2) : Object.keys(SIZES)
+
+// The client screenshots with every name painted out (logos, the lines that name the firm, staff, contact details), so
+// the promo shows the work without saying whose it is. Boxes are [x, y, w, h] in the 1280 × 800 screenshot, and delogo
+// fills each one from the pixels around it. The site itself keeps the originals.
+const REDACT = {
+  'mcf-home': ['mc-fiduciaire/home.webp', [70, 16, 160, 40], [72, 211, 270, 72], [72, 430, 590, 66]],
+  'mcf-team': ['mc-fiduciaire/team.webp', [70, 16, 160, 40], [72, 226, 322, 30], [126, 552, 250, 60], [515, 552, 250, 60], [904, 552, 250, 60]],
+  'mcf-info': ['mc-fiduciaire/info.webp', [70, 16, 160, 40]],
+  'mcf-contact': ['mc-fiduciaire/contact.webp', [70, 16, 160, 40], [74, 372, 220, 244]],
+  'egma-home': ['egma-construction/home.webp', [44, 18, 218, 38], [40, 220, 180, 24], [94, 689, 146, 26]],
+}
+function redact() {
+  const out = join(here, 'src', 'promo-shots')
+  mkdirSync(out, { recursive: true })
+  for (const [name, [shot, ...boxes]] of Object.entries(REDACT)) {
+    const filter = boxes.map(([x, y, w, h]) => `delogo=x=${x}:y=${y}:w=${w}:h=${h}`).join(',')
+    execFileSync(FFMPEG, ['-y', '-loglevel', 'error', '-i', join(here, '..', 'src', 'assets', shot), '-vf', filter, '-c:v', 'libwebp', '-quality', '92', join(out, `${name}.webp`)])
+  }
+}
 
 // the DevTools protocol over a pipe (we write to the browser's fd 3, it answers on fd 4): no port, no dependencies
 function launch() {
@@ -104,6 +123,7 @@ async function render(browser, format) {
   console.log(`\r${format}: ${frames} frames written to ${out}`)
 }
 
+redact()
 const browser = launch()
 try {
   for (const format of formats) await render(browser, format)

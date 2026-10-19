@@ -28,7 +28,8 @@
 
   #stage { position: absolute; left: 0; top: 0; overflow: hidden; background: var(--night); transform-origin: 0 0; }
   /* #world carries the camera shake, so it's the scenes' containing block: it must fill the stage */
-  #contours, #fx, #world { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+  #contours, #fx, #world, #field { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+  #field { left: -4%; top: -4%; width: 108%; height: 108%; background: var(--paper); opacity: 0; } /* oversized, so a shake never shows its edge */
   /* the two aurora pools the site hands over to as you scroll */
   .pool { position: absolute; width: calc(var(--u) * 130); height: calc(var(--u) * 110); margin: calc(var(--u) * -55) 0 0 calc(var(--u) * -65); border-radius: 50%; }
   #pool-v { background: radial-gradient(closest-side, rgba(124, 58, 237, 0.17), rgba(124, 58, 237, 0.1) 40%, rgba(124, 58, 237, 0)); }
@@ -42,12 +43,15 @@
   ul { list-style: none; }
 
   .two { letter-spacing: -0.035em; line-height: 1.04; }
-  .two > span { display: block; white-space: nowrap; }
+  .two > span:not(.ch) { display: block; white-space: nowrap; }
   [style*="--fs"] { font-size: calc(var(--u) * var(--fs)); }
   .dim { color: var(--dim); }
   /* lit: white with a little violet and cyan light behind it, turned up on the beats (--g) */
   .lit { color: var(--paper); text-shadow: 0 0 0.4em rgb(124 58 237 / calc(var(--g, 0) * 0.55)), 0 0 0.12em rgb(34 211 238 / calc(var(--g, 0) * 0.35)); }
-  .w { display: inline-block; white-space: pre; }
+  .w, .ch { display: inline-block; white-space: pre; }
+  /* ink: type on the Paper White screen */
+  .ink { color: var(--night); }
+  .sub.ink { color: rgba(8, 11, 18, 0.62); }
 
   /* the site's glass frame for screenshots, at video scale */
   .glass { box-sizing: border-box; overflow: hidden; border: 1px solid rgba(244, 247, 252, 0.08); border-radius: calc(var(--u) * 1.2); background: #0d1119;
@@ -64,10 +68,11 @@
   .search { position: absolute; inset: 0; display: flex; align-items: center; gap: calc(var(--u) * 2); padding-left: calc(var(--u) * 3.2); font-size: calc(var(--u) * 4.4); font-weight: 400; letter-spacing: -0.01em; white-space: nowrap; }
   .search .i { color: var(--muted); stroke-width: 2.2; }
   .caret { display: inline-block; width: calc(var(--u) * 0.32); height: 1.15em; margin-left: calc(var(--u) * 0.2); background: var(--paper); vertical-align: -0.2em; border-radius: 2px; }
-  .caption { position: absolute; left: 0; top: calc(100% + var(--u) * 3.4); }
-  .caption h3 { display: flex; align-items: center; gap: calc(var(--u) * 2); font-size: calc(var(--u) * 5); letter-spacing: -0.03em; line-height: 1.1; }
-  .caption p { margin-top: calc(var(--u) * 1.2); font-size: calc(var(--u) * 3); font-weight: 400; color: var(--muted); }
-  .domain { display: inline-flex; align-items: center; gap: calc(var(--u) * 0.6); padding: calc(var(--u) * 0.7) calc(var(--u) * 1.2) calc(var(--u) * 0.7) calc(var(--u) * 1.6); border: 1px solid rgba(244, 247, 252, 0.16); border-radius: 99px; font-size: calc(var(--u) * 2.4); font-weight: 400; letter-spacing: 0; color: #b2b5ba; }
+  /* the frame the camera moves around: a hairline outline with a second one inside, lit faintly */
+  .orbit { position: absolute; left: -4%; top: -7%; width: 108%; height: 114%; box-sizing: border-box; border: 2px solid rgba(244, 247, 252, 0.4); border-radius: calc(var(--u) * 2.6); box-shadow: 0 0 calc(var(--u) * 2.4) rgba(34, 211, 238, 0.22), inset 0 0 calc(var(--u) * 2.4) rgba(124, 58, 237, 0.16); }
+  .orbit i { position: absolute; inset: calc(var(--u) * 2.4); border: 1px solid rgba(244, 247, 252, 0.16); border-radius: calc(var(--u) * 1.6); }
+  .proof { position: relative; }
+  .proof .two + .two { position: absolute; left: 0; top: 0; }
   .plane { position: absolute; transform-origin: 50% 50%; }
   .plane .glass { position: absolute; }
   .over { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; }
@@ -134,7 +139,13 @@
   <div id="aurora"><i class="pool" id="pool-v"></i><i class="pool" id="pool-c"></i></div>
   <i class="pool" id="scrim"></i>
 
+  <!-- directional motion blur for things that whip past: one filter per element, its stdDeviation set per frame -->
+  <svg width="0" height="0" style="position: absolute"><defs id="smears"></defs></svg>
+
   <div id="world">
+    <!-- the white-out: "Clear." happens on a Paper White screen, and "one message." flashes it -->
+    <div id="field"></div>
+
     <!-- 1 · the hook -->
     <section class="scene" id="s1">
       <div class="col">
@@ -145,25 +156,22 @@
       </div>
     </section>
 
-    <!-- 2 + 3 · a search that opens on a client's site, then the work -->
+    <!-- 2 + 3 · a search that opens on one of our sites, a camera move past the work, and a slash out -->
     <section class="scene" id="s2">
       <div class="col">
         <div class="slot" id="slot">
           <div class="plane" id="plane"></div>
           <div class="morph glass" id="morph">
             <div class="search" id="search"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><span><span id="query"></span><i class="caret" id="caret"></i></span></div>
-            <img src="../../src/assets/mc-fiduciaire/home.webp" alt="" id="mcf">
+            <img src="promo-shots/mcf-home.webp" alt="" id="first-site">
           </div>
-          <div class="caption" id="cap-mcf">
-            <h3>MC Fiduciaire <span class="domain">mc-fiduciaire.be <svg class="i" viewBox="0 0 24 24"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span></h3>
-            <p>Accounting firm · 500+ clients</p>
-          </div>
-          <div class="caption" id="cap-egma">
-            <h3>EGMA Construction <span class="domain">egmaconstruction.be <svg class="i" viewBox="0 0 24 24"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span></h3>
-            <p>Renovation contractor · Booischot</p>
-          </div>
+          <div class="orbit" id="orbit"><i></i></div>
           <div class="over">
-            <h2 class="two" id="proof"><span class="lit" style="--fs: 12.5">Proof,</span><span class="dim" style="--fs: 12.5" data-fit>not promises.</span></h2>
+            <!-- two copies, each clipped to one side of the slash, so the line can split the headline in two -->
+            <div class="proof">
+              <h2 class="two" id="proof"><span class="lit" style="--fs: 12.5">Proof,</span><span class="dim" style="--fs: 12.5" data-fit>not promises.</span></h2>
+              <h2 class="two" id="proof-b" aria-hidden="true"><span class="lit" style="--fs: 12.5">Proof,</span><span class="dim" style="--fs: 12.5" data-fit>not promises.</span></h2>
+            </div>
           </div>
         </div>
       </div>
@@ -182,8 +190,8 @@
 
     <section class="scene" id="s4b">
       <div class="col">
-        <h2 class="lit two" style="--fs: 24" id="clear">Clear.</h2>
-        <p class="sub" id="clear-sub">Nothing to figure out.</p>
+        <h2 class="ink two" style="--fs: 24" id="clear" data-letters>Clear.</h2>
+        <p class="sub ink" id="clear-sub">Nothing to figure out.</p>
       </div>
     </section>
 
@@ -191,7 +199,7 @@
       <div class="col">
         <h2 class="two">
           <span class="dim" style="--fs: 7.4">Made to bring</span>
-          <span class="lit" style="--fs: 12.5">in clients.</span>
+          <span class="lit" style="--fs: 12.5" data-letters id="in-clients">in clients.</span>
         </h2>
         <div class="toasts">
           <div class="toast" id="toast-1">
@@ -386,6 +394,27 @@ function put(el, p) {
   if (g !== undefined) el.style.setProperty('--g', g.toFixed(3))
 }
 
+// motion blur along x, for things that whip past: an SVG blur, since CSS blur can't go one way. Call it after put(),
+// with the element's own blur if it has one; under half a pixel of smear it's just that blur
+const SMEAR = 0.006 // px of smear per px/s of timeline speed
+const rate = (f, t) => (f(t + 0.004) - f(t - 0.004)) / 0.008
+const smears = new Map()
+function smear(el, px, blur = 0) {
+  const own = blur > 0.15 ? `blur(${blur}px)` : ''
+  if (px < 0.5) return (el.style.filter = own || 'none')
+  let fe = smears.get(el)
+  if (!fe) {
+    const NS = 'http://www.w3.org/2000/svg', filter = document.createElementNS(NS, 'filter')
+    filter.id = `smear-${smears.size}`
+    for (const [k, v] of Object.entries({ x: '-60%', y: '-20%', width: '220%', height: '140%', 'color-interpolation-filters': 'sRGB' })) filter.setAttribute(k, v)
+    fe = filter.appendChild(document.createElementNS(NS, 'feGaussianBlur'))
+    $('smears').append(filter)
+    smears.set(el, fe)
+  }
+  fe.setAttribute('stdDeviation', `${px.toFixed(1)} 0`)
+  el.style.filter = `url(#${fe.parentNode.id}) ${own}`
+}
+
 // typing with a steady hand and a little jitter
 function typing(text, t0, perSecond, seed) {
   const rnd = random(seed)
@@ -400,7 +429,8 @@ const typed = (line, t) => line.text.slice(0, line.times.filter(at => t >= at).l
 const blink = (t, t0) => (Math.floor((t - t0) * 2.2) % 2 ? 0 : 1)
 
 // beats: each shakes the camera a little and brightens the contour lines
-const HITS = [[1.08, 1], [4.42, 0.45], [9.45, 0.8], [11.66, 0.55], [13.95, 0.55], [19.14, 1.2], [26.78, 0.7]]
+const HITS = [[1.08, 1], [4.42, 0.45], [7.78, 0.8], [9.42, 0.55], [11.66, 0.55], [12.32, 0.5], [14.1, 0.55], [19.14, 1.2], [26.78, 0.7]]
+const SLASH = 0.6 // the slash's angle, in radians up from horizontal
 function shake(t) {
   let x = 0, y = 0
   for (const [at, k] of HITS) {
@@ -520,7 +550,7 @@ function contourLines(canvas) {
 }
 const drawContours = contourLines($('contours'))
 // the lines drift a little faster than on the site and surge through each scene change
-const SURGES = [2.8, 10.4, 15.5, 18.2, 25.4]
+const SURGES = [2.8, 5.9, 9.3, 15.45, 18.2, 25.4]
 const contourTime = t => 14 + t * 0.9 + SURGES.reduce((sum, at) => sum + 1.4 * prog(t, at, at + 0.9, ease.inOut), 0)
 
 // ---------- the comet: a point of light that leads the eye from scene to scene, drawn on #fx
@@ -610,6 +640,25 @@ function drawFx(t) {
       fx.stroke()
     }
   }
+  // the slash: two lines of light cut across Proof, not promises., then run on along the cut and fade
+  const gone = prog(t, 9.6, 10.25)
+  if (t > 9.3 && gone < 1) {
+    const L = Math.hypot(W, H), dx = Math.cos(SLASH), dy = -Math.sin(SLASH)
+    ;[[0, prog(t, 9.3, 9.5, ease.out)], [4 * U, prog(t, 9.36, 9.56, ease.out)]].forEach(([off, p]) => {
+      const run = gone * 0.4 * L
+      const x0 = m.slash.x + dy * off - dx * (L - run), y0 = m.slash.y - dx * off - dy * (L - run)
+      for (const [width, blur, color] of [[1.8 * U, 1.6 * U, `rgba(34, 211, 238, ${0.55 * (1 - gone)})`], [0.3 * U, 0, `rgba(235, 250, 255, ${1 - gone})`]]) {
+        fx.filter = blur ? `blur(${blur}px)` : 'none'
+        fx.strokeStyle = color
+        fx.lineWidth = width
+        fx.beginPath()
+        fx.moveTo(x0, y0)
+        fx.lineTo(x0 + dx * 2 * L * p, y0 + dy * 2 * L * p)
+        fx.stroke()
+      }
+    })
+    fx.filter = 'none'
+  }
   fx.globalCompositeOperation = 'source-over'
 }
 
@@ -621,20 +670,21 @@ function box(el) {
   return { x: (r.left - s.left) / k, y: (r.top - s.top) / k, w: r.width / k, h: r.height / k, cx: (r.left + r.width / 2 - s.left) / k, cy: (r.top + r.height / 2 - s.top) / k }
 }
 
+// the client screenshots with their names painted out (promo-shots, made by brand/promo.mjs); the two project pages name no one
 const SHOTS = {
-  'mcf-home': '../../src/assets/mc-fiduciaire/home.webp',
-  'mcf-team': '../../src/assets/mc-fiduciaire/team.webp',
-  'mcf-info': '../../src/assets/mc-fiduciaire/info.webp',
-  'mcf-contact': '../../src/assets/mc-fiduciaire/contact.webp',
-  'egma-home': '../../src/assets/egma-construction/home.webp',
+  'mcf-home': 'promo-shots/mcf-home.webp',
+  'mcf-team': 'promo-shots/mcf-team.webp',
+  'mcf-info': 'promo-shots/mcf-info.webp',
+  'mcf-contact': 'promo-shots/mcf-contact.webp',
+  'egma-home': 'promo-shots/egma-home.webp',
   'egma-paving': '../../src/assets/egma-construction/paving.webp',
   'egma-photo': '../../src/assets/egma-construction/photo-viewer.webp',
 }
-// the wall of work in scene 3: EGMA's homepage in the middle, where the swipe brings it in
+// the wall of work in scene 3: the second site's homepage in the middle, where the camera move brings it in
 const WALL = [
   ['mcf-info', -1, -1], ['egma-paving', 0, -1], ['mcf-team', 1, -1],
   ['egma-photo', -1, 0], ['egma-home', 0, 0], ['mcf-home', 1, 0],
-  ['mcf-contact', -1, 1], ['egma-paving', 0, 1, 'flip'], ['mcf-team', 1, 1, 'flip'],
+  ['mcf-contact', -1, 1], ['egma-paving', 0, 1], ['mcf-team', 1, 1],
 ]
 const GAP = 5 * U
 const plane = $('plane')
@@ -653,8 +703,9 @@ const cells = WALL.map(([shot, c, r]) => {
 })
 
 for (const el of document.querySelectorAll('[data-words]')) el.innerHTML = el.textContent.split(' ').map(w => `<span class="w">${w}</span>`).join(' ')
+for (const el of document.querySelectorAll('[data-letters]')) el.innerHTML = [...el.textContent].map(c => `<span class="ch">${c}</span>`).join('')
 
-const QUERY = typing('mc fiduciaire', 3.5, 17, 7)
+const QUERY = typing('your business', 3.5, 17, 7)
 const MESSAGE = typing('Hi! I’m interested in a website for my business.', 20.95, 25, 11)
 const TASK_TIMES = [16.1, 16.42, 16.74, 17.06, 17.38, 17.7]
 const LANGS = ['en', 'ro', 'fr', 'nl', 'pt', 'ru', 'uk']
@@ -706,6 +757,26 @@ function layout() {
     { t: 19.14, x: one.cx, y: one.cy, rx: one.w * 0.5, ry: one.h * 0.4, n: 34, speed: 26 * U, seed: 3 },
     { t: 26.78, x: onMark({ x: 38, y: 41 })[0], y: onMark({ x: 38, y: 41 })[1], rx: U, ry: U, n: 16, speed: 18 * U, seed: 5 },
   ]
+  // the slash runs through the middle of Proof, not promises.; each copy of the headline keeps one side of it
+  const pb = box($('proof')), E = 30 * U, tan = Math.tan(SLASH)
+  const text = [...$('proof').children].map(el => {
+    const r = document.createRange()
+    r.selectNodeContents(el)
+    const b = r.getBoundingClientRect()
+    return [(b.left - stage.getBoundingClientRect().left) / k, b.width / k]
+  })
+  const left = Math.min(...text.map(([x]) => x)), right = Math.max(...text.map(([x, w]) => x + w))
+  m.slash = { x: (left + right) / 2, y: pb.cy }
+  const cx = m.slash.x - pb.x, cy = pb.h / 2
+  const y1 = cy + tan * (cx + E), y2 = cy - tan * (pb.w + E - cx)
+  const polygon = pts => `polygon(${pts.map(([x, y]) => `${x.toFixed(1)}px ${y.toFixed(1)}px`).join(', ')})`
+  $('proof').style.clipPath = polygon([[-E, -pb.h], [pb.w + E, -pb.h], [pb.w + E, y2], [-E, y1]])
+  $('proof-b').style.clipPath = polygon([[-E, y1], [pb.w + E, y2], [pb.w + E, 2 * pb.h], [-E, 2 * pb.h]])
+  // the white-out squashes to a line through the middle of Clear.
+  const clear = box($('clear'))
+  m.clearY = clear.cy
+  m.clearOrigin = clear.cy - box($('s4b').querySelector('.col')).y
+
   for (const id of ['peak', 'ring-1', 'ring-2']) {
     const path = $(id), l = path.getTotalLength()
     path.style.strokeDasharray = `${l} ${l}`
@@ -724,7 +795,7 @@ function scene1(t) {
 }
 
 function scene2(t) {
-  // a search pill opens where the comet lands, types, and grows into the site it found
+  // a search pill opens where the comet lands, types, and grows into one of our sites
   const pill = 10 * U
   const morph = $('morph')
   const h = kf(t, [4.5, pill], [5.2, SLOT_H, ease.inOut])
@@ -733,38 +804,54 @@ function scene2(t) {
   morph.style.width = `${kf(t, [3.05, pill], [3.55, SLOT_W, ease.expo])}px`
   morph.style.borderRadius = `${kf(t, [4.5, pill / 2], [5.2, 1.2 * U, ease.inOut])}px`
   morph.style.setProperty('--edge', kf(t, [4.38, 0.14], [4.45, 0.55, ease.out], [4.9, 0.08]))
-  put(morph, mix(
-    { o: prog(t, 3.02, 3.18) },
-    { rx: kf(t, [4.5, 0], [5.15, 10, ease.inOut], [7.3, 3, ease.out]), ry: kf(t, [4.5, 0], [5.15, -12, ease.inOut], [7.3, 5, ease.inOut]), z: kf(t, [4.5, 0], [5.15, -10 * U, ease.inOut], [7.3, 0, ease.out]) },
-    { x: kf(t, [7.32, 0], [7.72, -SLOT_W - 30 * U, ease.in]), ry: kf(t, [7.32, 0], [7.72, 30, ease.in]), blur: kf(t, [7.32, 0], [7.72, 10, ease.in]), o: 1 - prog(t, 7.5, 7.72) },
-  ))
+  // then the camera moves: this site turns away to the left as the next one flies in from the right, both smeared
+  const away = t => kf(t, [5.9, 0], [6.55, -SLOT_W - 40 * U, ease.in])
+  put(morph, {
+    x: away(t),
+    rx: kf(t, [4.5, 0], [5.15, 10, ease.inOut], [5.9, 6]),
+    ry: kf(t, [4.5, 0], [5.15, -12, ease.inOut], [5.9, -6], [6.55, -45, ease.in]),
+    z: kf(t, [4.5, 0], [5.15, -10 * U, ease.inOut], [6.55, -24 * U, ease.in]),
+    o: prog(t, 3.02, 3.18) * (1 - prog(t, 6.4, 6.55)),
+  })
+  smear(morph, Math.abs(rate(away, t)) * SMEAR)
   $('search').style.opacity = prog(t, 3.15, 3.35) * (1 - prog(t, 4.45, 4.58))
   $('query').textContent = typed(QUERY, t)
   $('caret').style.opacity = t < QUERY.times[0] || t > QUERY.end + 0.1 ? blink(t, 3.15) : 1
-  put($('mcf'), { o: prog(t, 4.52, 4.88), s: kf(t, [4.52, 1.1], [5.6, 1, ease.out], [7.4, 1.05, ease.linear]) })
-  put($('cap-mcf'), mix(rise(t, 5.3), fadeOut(t, 7.2, 0.25)))
+  put($('first-site'), { o: prog(t, 4.52, 4.88), s: kf(t, [4.52, 1.1], [5.6, 1, ease.out], [6.5, 1.03, ease.linear]) })
 
-  // EGMA swipes in as the middle of a wall of work, then the camera tilts back to show the whole wall
-  const tilt = prog(t, 8.9, 9.75, ease.inOut)
-  const glide = prog(t, 9.2, 10.8, ease.out)
+  // the second site lands in the middle of a wall of work, and the camera tilts back to show the whole wall
+  const arrive = t => kf(t, [6.05, SLOT_W + 40 * U], [6.75, 0, ease.expo])
+  const tilt = prog(t, 7.0, 7.75, ease.inOut)
+  const glide = prog(t, 7.4, 9.4, ease.out)
   plane.style.transform =
-    `perspective(${PERSPECTIVE}px) translate3d(${kf(t, [7.42, SLOT_W + 30 * U], [7.95, 0, ease.expo])}px, ${lerp(0, 3 * U, tilt) - prog(t, 10.4, 10.8, ease.in) * 30 * U}px, 0)` +
-    ` rotateX(${lerp(kf(t, [7.42, 4], [8.9, 2]), 54, tilt)}deg) rotateY(${kf(t, [7.42, -30], [7.95, -6, ease.expo], [8.9, 3, ease.inOut]) * (1 - tilt)}deg)` +
-    ` rotateZ(${lerp(0, -28, tilt)}deg) translate(${lerp(0, 1, tilt) * lerp(10, -10, glide) * U}px, ${lerp(0, 1, tilt) * lerp(6, -6, glide) * U}px) scale(${lerp(1, 0.48, tilt)})`
-  plane.style.filter = t < 7.85 ? `blur(${kf(t, [7.42, 12], [7.85, 0])}px)` : 'none'
-  plane.style.opacity = prog(t, 7.42, 7.5) * (1 - prog(t, 10.45, 10.8))
-  const dim = kf(t, [9.3, 1], [9.7, 0.3])
-  for (const { img, ring } of cells) img.style.opacity = (ring ? prog(t, 8.95 + ring * 0.12, 9.45 + ring * 0.12) : 1) * dim
-  put($('cap-egma'), mix(rise(t, 7.75), fadeOut(t, 8.75, 0.25)))
+    `perspective(${PERSPECTIVE}px) translate3d(${arrive(t)}px, ${lerp(0, 3 * U, tilt)}px, 0)` +
+    ` rotateX(${lerp(kf(t, [6.05, 4], [7.0, 2]), 54, tilt)}deg) rotateY(${kf(t, [6.05, 45], [6.75, -5, ease.expo], [7.0, -2]) * (1 - tilt)}deg)` +
+    ` rotateZ(${lerp(0, -28, tilt)}deg) translate(${tilt * lerp(10, -10, glide) * U}px, ${tilt * lerp(6, -6, glide) * U}px) scale(${lerp(1, 0.48, tilt)})`
+  plane.style.opacity = prog(t, 6.05, 6.12) * (1 - prog(t, 9.45, 9.85))
+  smear(plane, Math.abs(rate(arrive, t)) * SMEAR)
+  const dim = kf(t, [7.5, 1], [7.95, 0.3])
+  for (const { img, ring } of cells) img.style.opacity = (ring ? prog(t, 7.05 + ring * 0.12, 7.5 + ring * 0.12) : 1) * dim
+  // the frame the camera moves around, turning with it
+  put($('orbit'), {
+    rx: kf(t, [5.45, 16], [7.0, 7], [9.4, 3]),
+    ry: kf(t, [5.45, 30], [6.75, -22, ease.inOut], [7.75, -8], [9.4, 6]),
+    rz: kf(t, [5.45, -5], [7.75, 2]),
+    s: kf(t, [5.45, 1.25], [6.2, 1.04], [7.75, 0.98]),
+    o: prog(t, 5.45, 5.8) * (1 - prog(t, 9.45, 9.8)),
+  })
 
-  const proof = $('proof').children
-  put(proof[0], mix(slam(t, 9.32), { g: kf(t, [9.35, 0], [9.45, 1, ease.out], [10.2, 0.3]) }))
-  put(proof[1], rise(t, 9.5, 0.6))
-  put($('proof'), through(t, 10.45, 0.35))
+  // Proof, not promises. Then a slash of light cuts it, and the two halves slide apart along the cut
+  const split = prog(t, 9.48, 10.1, ease.in)
+  ;[[$('proof'), 1], [$('proof-b'), -1]].forEach(([copy, side]) => {
+    const [lit, dim] = copy.children
+    put(lit, mix(slam(t, 7.75), { g: kf(t, [7.78, 0], [7.88, 1, ease.out], [8.6, 0.3]) }))
+    put(dim, rise(t, 7.9, 0.6))
+    put(copy, { x: side * split * 26 * U * Math.cos(SLASH), y: -side * split * 26 * U * Math.sin(SLASH), o: 1 - prog(t, 9.75, 10.12), blur: split * 6 })
+  })
 }
 
 function scene4(t) {
-  // In their language: the word passes through each of the seven languages the MC Fiduciaire site speaks
+  // In their language: the word passes through each of the seven languages one of our sites speaks
   const reel = $('reel').children
   let now = 1
   REEL_AT.forEach((at, i) => t >= at && at > REEL_AT[now] && (now = i))
@@ -782,20 +869,38 @@ function scene4(t) {
   put($('langs'), rise(t, 10.9))
   put(s4a, through(t, 12.3, 0.3))
 
-  // Clear: a focus pull
-  put($('clear'), { s: kf(t, [12.36, 1.18], [12.95, 1, ease.brand]), o: prog(t, 12.36, 12.55), blur: kf(t, [12.36, 36], [12.85, 0, ease.out], [13.58, 0], [13.82, 26, ease.in]), g: 0.25 })
-  put($('clear-sub'), mix(rise(t, 12.7), { o: 1 - prog(t, 13.58, 13.78) }))
+  // Clear, on the white-out: each letter smears in stretched and snaps to size, then the word keeps widening
+  $('clear').querySelectorAll('.ch').forEach((ch, i) => {
+    const at = 12.36 + i * 0.035, p = prog(t, at, at + 0.3, ease.expo)
+    ch.style.transformOrigin = 'left 60%'
+    ch.style.transform = `translateX(${(1 - p) * 0.5}em) scaleX(${lerp(3.2, 1, p)})`
+    ch.style.opacity = prog(t, at, at + 0.05)
+    smear(ch, (1 - p) * 30)
+  })
+  $('clear').style.letterSpacing = `${lerp(-0.035, 0.05, prog(t, 12.7, 13.45, ease.out))}em`
+  put($('clear-sub'), rise(t, 12.7))
+  // then the white squashes to a line through the word, and the word goes with it
+  const s4b = $('s4b').querySelector('.col')
+  s4b.style.transformOrigin = `50% ${m.clearOrigin}px`
+  s4b.style.transform = `scale(1, ${lerp(1, 0.004, prog(t, 13.42, 13.62, ease.in))})`
 
-  // Made to bring in clients, and here they come
+  // Made to bring in clients, a letter at a time, and here they come
   const s4c = $('s4c').querySelector('.col')
   const [set, point] = s4c.querySelector('.two').children
   put(set, rise(t, 13.66))
-  put(point, mix(slam(t, 13.8), { g: kf(t, [13.9, 0], [13.97, 1, ease.out], [14.7, 0.3]) }))
+  point.querySelectorAll('.ch').forEach((ch, i) => {
+    const at = 13.8 + i * 0.028
+    put(ch, { s: kf(t, [at, 0.2], [at + 0.22, 1, ease.back]), y: (1 - prog(t, at, at + 0.22, ease.out)) * 0.25 * 12.5 * U, o: prog(t, at, at + 0.06) })
+  })
+  point.style.setProperty('--g', kf(t, [14.08, 0], [14.15, 1, ease.out], [14.8, 0.3]))
   ;['toast-1', 'toast-2'].forEach((id, i) => {
     const at = 14.25 + i * 0.42
     put($(id), { y: kf(t, [at, -3 * U], [at + 0.45, 0, ease.back]), s: kf(t, [at, 0.94], [at + 0.45, 1, ease.back]), o: prog(t, at, at + 0.15) })
   })
-  put(s4c, through(t, 15.48, 0.3))
+  // and whips off to the left
+  const whip = t => kf(t, [15.45, 0], [15.68, -W * 1.1, ease.in])
+  put(s4c, { x: whip(t) })
+  smear(s4c, Math.abs(rate(whip, t)) * SMEAR)
 }
 
 function scene5(t) {
@@ -808,10 +913,14 @@ function scene5(t) {
     const spin = (rnd() - 0.5) * 160, drift = (rnd() - 0.5) * 24 * U
     return { y: -9 * U * d + 0.5 * 560 * U * d * d, x: drift * d, rz: spin * d, o: 1 - prog(d, 0.35, 0.7) }
   }
+  // the question whips in from the right, right behind the last scene
+  const enter = t => kf(t, [15.55, W * 1.1], [15.88, 0, ease.expo])
+  put($('diy-title'), { x: enter(t) })
+  smear($('diy-title'), Math.abs(rate(enter, t)) * SMEAR)
   const title = $('diy-title').querySelectorAll('.w')
-  put(title[0], mix(rise(t, 15.6), fall(0, 0.26)))
-  put(title[1], mix(rise(t, 15.6), fall(1, 0.3)))
-  put(title[2], mix(slam(t, 15.74), { g: kf(t, [15.8, 0], [15.9, 0.8, ease.out], [16.6, 0.2]) }, fall(2, 0.22)))
+  put(title[0], mix(fall(0, 0.26)))
+  put(title[1], mix(fall(1, 0.3)))
+  put(title[2], mix({ g: kf(t, [15.8, 0], [15.9, 0.8, ease.out], [16.6, 0.2]) }, fall(2, 0.22)))
   const tasks = $('tasks').children
   for (let i = 0; i < tasks.length; i++) put(tasks[i], mix({ x: kf(t, [TASK_TIMES[i], -4 * U], [TASK_TIMES[i] + 0.4, 0, ease.expo]), o: prog(t, TASK_TIMES[i], TASK_TIMES[i] + 0.15) }, fall(i + 3, (tasks.length - i) * 0.035)))
   const done = TASK_TIMES.filter(at => t >= at).length
@@ -865,14 +974,28 @@ function scene7(t) {
   $('contact').querySelectorAll('li').forEach((li, i) => put(li, rise(t, 28.35 + i * 0.12)))
 }
 
-const SCENES = [['s1', 0, 3.25], ['s2', 3.0, 10.85], ['s4a', 10.5, 12.65], ['s4b', 12.3, 13.85], ['s4c', 13.6, 15.8], ['s5', 15.55, 19.4], ['s6', 18.8, 25.8], ['s7', 25.6, TIMELINE + 1]]
-const DRAWS = [[0, 3.25, scene1], [3.0, 10.85, scene2], [10.5, 15.8, scene4], [15.55, 19.4, scene5], [18.8, 25.8, scene6], [25.6, TIMELINE + 1, scene7]]
+// the white-out: a flash to a Paper White screen for Clear., which squashes to a line through the word and is gone;
+// one message. flashes it faintly
+function whiteout(t) {
+  const field = $('field')
+  if (t < 16) {
+    field.style.opacity = prog(t, 12.28, 12.36) * (1 - prog(t, 13.62, 13.74))
+    field.style.transformOrigin = `50% ${m.clearY + 0.04 * H}px`
+    field.style.transform = `scale(${1 - prog(t, 13.6, 13.74, ease.in)}, ${lerp(1, 0.004, prog(t, 13.42, 13.62, ease.in))})`
+  } else {
+    field.style.opacity = kf(t, [19.06, 0], [19.1, 0.2, ease.out], [19.45, 0])
+    field.style.transform = 'none'
+  }
+}
+
+const SCENES = [['s1', 0, 3.25], ['s2', 3.0, 10.25], ['s4a', 10.5, 12.65], ['s4b', 12.3, 13.85], ['s4c', 13.6, 15.8], ['s5', 15.5, 19.4], ['s6', 18.8, 25.8], ['s7', 25.6, TIMELINE + 1]]
+const DRAWS = [[0, 3.25, scene1], [3.0, 10.25, scene2], [10.5, 15.8, scene4], [15.5, 19.4, scene5], [18.8, 25.8, scene6], [25.6, TIMELINE + 1, scene7]]
 
 // the pace: each step is [until this timeline second, play at this speed]. The holds go fastest, the moves only a little
 // faster, so it cuts like a quick edit without any motion feeling rushed. Steps change between moves, never during one
 const PACE = [
-  [1.1, 1.15], [3.12, 1.7], [3.5, 1.2], [4.45, 1.45], [5.3, 1.15], [7.25, 2.1], [8.0, 1.2], [8.9, 2], [9.8, 1.3], [10.45, 1.7],
-  [11.7, 1.2], [12.3, 1.7], [13.0, 1.2], [13.6, 1.7], [14.75, 1.25], [15.5, 1.6], [16.1, 1.2], [18.1, 1.5], [19.45, 1.2], [20.35, 1.8],
+  [1.1, 1.15], [3.12, 1.7], [3.5, 1.2], [4.45, 1.45], [5.3, 1.15], [5.9, 1.4], [6.75, 1.25], [7.0, 1.6], [7.75, 1.25], [9.3, 1.6], [10.45, 1.5],
+  [11.7, 1.2], [12.3, 1.7], [13.0, 1.2], [13.6, 1.4], [14.75, 1.25], [15.45, 1.6], [16.1, 1.2], [18.1, 1.5], [19.45, 1.2], [20.35, 1.8],
   [21.0, 1.3], [22.9, 2], [23.6, 1.2], [24.85, 1.5], [25.35, 2], [27.7, 1.25], [28.9, 1.3], [TIMELINE, 1.5],
 ]
 const STEPS = PACE.map(([until, speed], i) => ({ from: i ? PACE[i - 1][0] : 0, until, speed }))
@@ -888,6 +1011,7 @@ function seek(t) {
   t = timeline(clamp(t, 0, DUR - 1e-6))
   for (const [id, from, to] of SCENES) $(id).style.visibility = t >= from && t < to ? 'visible' : 'hidden'
   for (const [from, to, draw] of DRAWS) if (t >= from && t < to) draw(t)
+  whiteout(t)
   const { x, y } = shake(t)
   $('world').style.transform = `translate(${x}px, ${y}px)`
   // the hero's lines lead, hand over to the aurora for the middle, and come back for the close (as the site does)

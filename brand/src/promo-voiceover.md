@@ -7,19 +7,19 @@ It's a fast cut, so read it quick and punchy: about three words a second, energy
 | Time (s) | On screen | Say |
 |---:|---|---|
 | 0.2 | Before they call you, they google you. | Before they call you, they google you. Every time. |
-| 2.3 | A search being typed | And what comes up? |
-| 3.6 | One of our sites tilts into view | Hopefully, something like this. |
-| 5.2 | A second site swipes in | Or this. |
-| 6.2 | A wall of our sites: Proof, not promises. | Proof, not promises. |
-| 7.5 | In their language., cycling through seven languages | In their language. |
-| 8.5 | Clear. | Clear. |
-| 9.8 | Made to bring in clients., and two notifications | Your phone? Buzzing. |
-| 10.8 | Doing it yourself? and a to-do list | You could do it yourself… |
-| 12.0 | "Weekends gone" climbs, then the list falls over | Bye-bye, weekends. |
-| 12.9 | Or send us one message. | Or just send us one message. |
-| 14.6 | A message is typed, sent and answered | That's it. Design, build, launch: that's on us. |
-| 18.3 | The mark draws itself, then andu design and Let's build your website. | andu design. Let's build yours. |
-| 20.4 | The contact details | We're one message away. |
+| 2.3 | A search for "your business" | And what comes up? |
+| 3.1 | The search opens on one of our sites | Hopefully, something like this. |
+| 4.6 | The camera swings to a second site | Or this. |
+| 5.7 | A wall of our sites: Proof, not promises., then a slash of light cuts it in two | Proof, not promises. |
+| 8.1 | In their language., cycling through seven languages | In their language. |
+| 9.0 | A white screen: Clear., its letters stretching | Clear. |
+| 10.4 | Made to bring in clients., popping in, and two notifications | Your phone? Buzzing. |
+| 11.4 | Doing it yourself? whips in, with a to-do list | You could do it yourself… |
+| 12.6 | "Weekends gone" climbs, then the list falls over | Bye-bye, weekends. |
+| 13.5 | Or send us one message. | Or just send us one message. |
+| 15.2 | A message is typed, sent and answered | That's it. Design, build, launch: that's on us. |
+| 18.9 | The mark draws itself, then andu design and Let's build your website. | andu design. Let's build yours. |
+| 21.0 | The contact details | We're one message away. |
 
 ## Ready-made voice
 
