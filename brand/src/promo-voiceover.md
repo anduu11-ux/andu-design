@@ -23,7 +23,7 @@ It's a fast cut, so read it quick and punchy: about three words a second, energy
 
 ## Ready-made voice
 
-`brand/video/andu-promo-voice-female.m4a` is this script read by Kokoro, an open-source voice model (Apache 2.0, so fine for ads), with the voice `af_heart`. Each line is placed so its key word lands on its beat, the beat after "Proof," is cut in as 0.3 s of silence, and the track is mastered to −14 LUFS, the loudness TikTok and Instagram play at.
+`brand/video/andu-promo-voice-female.m4a` is this script read by Kokoro, an open-source voice model (Apache 2.0, so fine for ads), with the voice `af_heart`. Each line is placed so its key word lands on its beat, the beat after "Proof," is cut in as 0.3 s of silence, and the track is mastered to about −15 LUFS with peaks under −1 dB, so TikTok and Instagram play it at full loudness without squashing it.
 
 To put it on the video, drop both into CapCut, or:
 
