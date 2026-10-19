@@ -88,9 +88,11 @@
   .toasts { margin-top: calc(var(--u) * 6); display: grid; gap: calc(var(--u) * 2); width: min(100%, calc(var(--u) * 78)); }
   .toast { display: flex; align-items: center; gap: calc(var(--u) * 2.6); padding: calc(var(--u) * 2.6) calc(var(--u) * 3); border: 1px solid var(--hair); border-radius: calc(var(--u) * 2.4); background: rgba(244, 247, 252, 0.05); }
   .toast b { display: block; font-size: calc(var(--u) * 3.8); font-weight: 500; letter-spacing: -0.015em; }
-  .toast span { display: block; margin-top: calc(var(--u) * 0.6); font-size: calc(var(--u) * 3.2); color: var(--muted); }
+  .toast b + span { display: block; margin-top: calc(var(--u) * 0.6); font-size: calc(var(--u) * 3.2); color: var(--muted); }
   .toast time { margin-left: auto; align-self: flex-start; font-size: calc(var(--u) * 2.8); color: var(--muted); }
-  .chip { display: grid; place-items: center; width: calc(var(--u) * 8); height: calc(var(--u) * 8); flex: none; border: 1px solid rgba(244, 247, 252, 0.14); border-radius: calc(var(--u) * 1.6); font-size: calc(var(--u) * 3.8); color: #b2b5ba; }
+  /* an app icon, like a real notification: the brand gradient with the glyph in white */
+  .chip { display: grid; place-items: center; width: calc(var(--u) * 8); height: calc(var(--u) * 8); flex: none; border: 1px solid rgba(244, 247, 252, 0.18); border-radius: calc(var(--u) * 1.9); background: linear-gradient(140deg, #7c3aed, #22d3ee); box-shadow: 0 0 calc(var(--u) * 2.4) rgba(34, 211, 238, 0.25); font-size: calc(var(--u) * 4.4); color: var(--paper); }
+  .chip .i { stroke-width: 2.1; }
 
   /* 5 */
   .diy { margin-top: calc(var(--u) * 6); display: flex; gap: calc(var(--u) * 6); align-items: flex-end; }
