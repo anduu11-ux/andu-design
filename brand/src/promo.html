@@ -163,7 +163,7 @@
           <div class="plane" id="plane"></div>
           <div class="morph glass" id="morph">
             <div class="search" id="search"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><span><span id="query"></span><i class="caret" id="caret"></i></span></div>
-            <img src="promo-shots/mcf-home.webp" alt="" id="first-site">
+            <img src="../../src/assets/mc-fiduciaire/home.webp" alt="" id="first-site">
           </div>
           <div class="orbit" id="orbit"><i></i></div>
           <div class="over">
@@ -670,11 +670,12 @@ function box(el) {
   return { x: (r.left - s.left) / k, y: (r.top - s.top) / k, w: r.width / k, h: r.height / k, cx: (r.left + r.width / 2 - s.left) / k, cy: (r.top + r.height / 2 - s.top) / k }
 }
 
-// the client screenshots with their names painted out (promo-shots, made by brand/promo.mjs); the two project pages name no one
+// the client screenshots; the three that show people's details are copies with those painted out (promo-shots, made
+// by brand/promo.mjs)
 const SHOTS = {
-  'mcf-home': 'promo-shots/mcf-home.webp',
+  'mcf-home': '../../src/assets/mc-fiduciaire/home.webp',
   'mcf-team': 'promo-shots/mcf-team.webp',
-  'mcf-info': 'promo-shots/mcf-info.webp',
+  'mcf-info': '../../src/assets/mc-fiduciaire/info.webp',
   'mcf-contact': 'promo-shots/mcf-contact.webp',
   'egma-home': 'promo-shots/egma-home.webp',
   'egma-paving': '../../src/assets/egma-construction/paving.webp',

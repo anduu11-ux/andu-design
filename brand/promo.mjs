@@ -17,15 +17,13 @@ const FPS = 30
 const SIZES = { '9x16': [1080, 1920], '16x9': [1920, 1080] }
 const formats = process.argv.length > 2 ? process.argv.slice(2) : Object.keys(SIZES)
 
-// The client screenshots with every name painted out (logos, the lines that name the firm, staff, contact details), so
-// the promo shows the work without saying whose it is. Boxes are [x, y, w, h] in the 1280 × 800 screenshot, and delogo
-// fills each one from the pixels around it. The site itself keeps the originals.
+// The client screenshots with people's details painted out: staff names and emails, phone numbers, the office address.
+// The clients' branding stays. Boxes are [x, y, w, h] in the 1280 × 800 screenshot, and delogo fills each one from the
+// pixels around it. The site itself keeps the originals.
 const REDACT = {
-  'mcf-home': ['mc-fiduciaire/home.webp', [70, 16, 160, 40], [72, 211, 270, 72], [72, 430, 590, 66]],
-  'mcf-team': ['mc-fiduciaire/team.webp', [70, 16, 160, 40], [72, 226, 322, 30], [126, 552, 250, 60], [515, 552, 250, 60], [904, 552, 250, 60]],
-  'mcf-info': ['mc-fiduciaire/info.webp', [70, 16, 160, 40]],
-  'mcf-contact': ['mc-fiduciaire/contact.webp', [70, 16, 160, 40], [74, 372, 220, 244]],
-  'egma-home': ['egma-construction/home.webp', [44, 18, 218, 38], [40, 220, 180, 24], [94, 689, 146, 26]],
+  'mcf-team': ['mc-fiduciaire/team.webp', [126, 552, 250, 60], [515, 552, 250, 60], [904, 552, 250, 60]],
+  'mcf-contact': ['mc-fiduciaire/contact.webp', [74, 372, 220, 244]],
+  'egma-home': ['egma-construction/home.webp', [94, 689, 146, 26]],
 }
 function redact() {
   const out = join(here, 'src', 'promo-shots')
