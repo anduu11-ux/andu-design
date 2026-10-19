@@ -2,7 +2,7 @@
 
 The script for the promo video (`brand/video/andu-promo-*.mp4`, made from `promo.html`). Each line starts at its time, while its scene is on screen, and the big words on screen land as they're said.
 
-It's a fast cut, so read it quick and punchy: about three words a second, energy up, no long pauses (the cuts do the breathing). Stay warm, and land the jokes dry ("Or this.", "Bye-bye, weekends."). "andu" is said AHN-doo.
+It's a fast cut, so read it quick and punchy: about three words a second, energy up, no long pauses (the cuts do the breathing). Stay warm, land the jokes dry ("Or this.", "Bye-bye, weekends."), and leave a real beat after "Proof," (about a third of a second). "andu" is said AHN-doo.
 
 | Time (s) | On screen | Say |
 |---:|---|---|
@@ -10,7 +10,7 @@ It's a fast cut, so read it quick and punchy: about three words a second, energy
 | 2.3 | A search for "your business" | And what comes up? |
 | 3.1 | The search opens on one of our sites | Hopefully, something like this. |
 | 4.6 | The camera swings to a second site | Or this. |
-| 5.7 | A wall of our sites: Proof, not promises., then a slash of light cuts it in two | Proof, not promises. |
+| 5.7 | A wall of our sites: Proof, not promises., then a slash of light cuts it in two | Proof, *(beat)* not promises. |
 | 8.1 | In their language., cycling through seven languages | In their language. |
 | 9.0 | A white screen: Clear., its letters stretching | Clear. |
 | 10.4 | Made to bring in clients., popping in, and two notifications | Your phone? Buzzing. |
@@ -23,7 +23,7 @@ It's a fast cut, so read it quick and punchy: about three words a second, energy
 
 ## Ready-made voice
 
-`brand/video/andu-promo-voice-female.m4a` is this script read by Kokoro, an open-source voice model (Apache 2.0, so fine for ads), with the voice `af_heart`. Each line is placed so its key word lands on its beat, and the track is mastered to −14 LUFS, the loudness TikTok and Instagram play at.
+`brand/video/andu-promo-voice-female.m4a` is this script read by Kokoro, an open-source voice model (Apache 2.0, so fine for ads), with the voice `af_heart`. Each line is placed so its key word lands on its beat, the beat after "Proof," is cut in as 0.3 s of silence, and the track is mastered to −14 LUFS, the loudness TikTok and Instagram play at.
 
 To put it on the video, drop both into CapCut, or:
 
